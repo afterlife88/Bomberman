@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,13 +20,23 @@ namespace BomberManUAWC.Hubs
 		{
 			// Initialize player who connected
 			Clients.Caller.initializeMap(ConstantValues.MapData).Wait();
-
+			Debug.WriteLine(_currentPlayerState.Player);
 			EnsureGameLoop();
-			return Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
+			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
+
+			return Clients.Caller.initialize(_currentPlayerState.Player);
 		}
 		private void EnsureGameLoop()
 		{
 			new Thread(_ => RunGameLoop()).Start();
+		}
+		public void SendKeys(KeyboardState[] inputs)
+		{
+			foreach (var input in inputs)
+			{
+				_currentPlayerState.Inputs.Enqueue(input);
+			}
+
 		}
 		private void RunGameLoop()
 		{
@@ -68,13 +79,14 @@ namespace BomberManUAWC.Hubs
 			player.ExactX = _initialPosition.X * ConstantValues.POWER;
 			player.ExactY = _initialPosition.Y * ConstantValues.POWER;
 			player.Direction = Direction.South;
-			return new PlayerState() {Player = player};
+			
+			return new PlayerState() { Player = player, Inputs = new ConcurrentQueue<KeyboardState>()};
 		}
-		//public override Task OnDisconnected(bool stopCalled)
-		//{
-		//	_currentPlayer = null;
+		public override Task OnDisconnected(bool stopCalled)
+		{
+			_currentPlayerState = null;
 
-		//	return base.OnDisconnected(stopCalled);
-		//}
+			return null;
+		}
 	}
 }

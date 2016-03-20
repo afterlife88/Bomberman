@@ -2,19 +2,41 @@
 <html>
 <head>
   <title>BombermanUAWC</title>
-  <style>
-    #shape {
-      width: 100px;
-      height: 100px;
-      background-color: #FF0000;
-    }
-  </style>
-</head>
-<body>
   <script src="Scripts/jquery-1.6.4.min.js"></script>
   <script src="Scripts/jquery-ui-1.11.4.min.js"></script>
-  <script src="Scripts/jquery.signalR-2.2.0.js"></script>
-  <script src="/signalr/hubs"></script>
+  <script src="Scripts/jquery.signalR-2.2.0.min.js"></script>
+  <script type="text/javascript" src="signalr/hubs"></script>
+  <script type="text/javascript" src="Scripts/game/constants.js"></script>
+  <script type="text/javascript" src="Scripts/game/utils.js"></script>
+  <script type="text/javascript" src="Scripts/game/map.js"></script>
+  <script type="text/javascript" src="Scripts/game/explosion.js"></script>
+  <script type="text/javascript" src="Scripts/game/powerup.js"></script>
+  <script type="text/javascript" src="Scripts/game/bomb.js"></script>
+  <script type="text/javascript" src="Scripts/game/bomber.js"></script>
+  <script type="text/javascript" src="Scripts/game/game.js"></script>
+  <script type="text/javascript" src="Scripts/game/assman.js"></script>
+  <script type="text/javascript" src="Scripts/game/renderer.js"></script>
+  <script type="text/javascript" src="Scripts/game/main.js"></script>
+  <style type="text/css">
+    html, body {
+      background: #212121;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    #canvas {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  </style>
+
+</head>
+<body>
 
 
   <canvas id="canvas" width="480" height="415"></canvas>
