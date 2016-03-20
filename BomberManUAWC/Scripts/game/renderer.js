@@ -1,6 +1,6 @@
 ﻿(function ($, window) {
-    var SCALE_FACTOR = 1.5,
-        BASE_TILE_SIZE = 24;
+    var SCALE_FACTOR = 2.3,
+        BASE_TILE_SIZE = 40;
 
     window.Game.Renderer = function (assetManager) {
         this.assetManager = assetManager;
@@ -87,7 +87,7 @@
                                           metadata.width,
                                           metadata.height,
                                           x * game.map.tileSize,
-                                          (y * game.map.tileSize) - (0.9 * game.map.tileSize),
+                                          (y * game.map.tileSize) - (0.6 * game.map.tileSize),
                                           width,
                                           height);
 

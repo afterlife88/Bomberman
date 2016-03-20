@@ -1,4 +1,5 @@
 ﻿using System;
+using GameEngine.Common;
 
 namespace GameEngine.MapGenerator
 {
@@ -6,25 +7,23 @@ namespace GameEngine.MapGenerator
 	{
 		private static volatile Map.Map _instance;
 		private static object syncRoot = new Object();
-
-
-		static string mapData = "222222222222222" +
-		                        "200000000000002" +
-		                        "202020202020202" +
-		                        "200000000000002" +
-		                        "202020202020202" +
-		                        "200000000000002" +
-		                        "202020202020202" +
-		                        "200000000000002" +
-		                        "202020202020202" +
-		                        "200000000000002" +
-		                        "200020202020202" +
-		                        "200000000000002" +
-		                        "222222222222222";
+		//static string mapData = "222222222222222" +
+		//                        "200000000000002" +
+		//                        "202020202020202" +
+		//                        "200000000000002" +
+		//                        "202020202020202" +
+		//                        "200000000000002" +
+		//                        "202020202020202" +
+		//                        "200000000000002" +
+		//                        "202020202020202" +
+		//                        "200000000000002" +
+		//                        "200020202020202" +
+		//                        "200000000000002" +
+		//                        "222222222222222";
 
 		private static int width = 15;
 		private static int height = 13;
-		private static int tileSize = 32;
+		private static int tileSize = 40;
 
 		public static Map.Map GetMap
 		{
@@ -35,7 +34,7 @@ namespace GameEngine.MapGenerator
 					lock (syncRoot)
 					{
 						if (_instance == null)
-							_instance = new Map.Map(mapData, width, height, tileSize);
+							_instance = new Map.Map(ConstantValues.MapData, width, height, tileSize);
 					}
 				}
 

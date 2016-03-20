@@ -10,11 +10,11 @@
     };
 
     window.Game.Keys = {
-        Up: 38,
-        Down: 40,
-        Left: 37,
-        Right:39,
-        Space: 32
+        UP: 38,
+        DOWN: 40,
+        LEFT: 37,
+        RIGHT: 39,
+        SPACE: 32
     };
 
     window.Game.Bombs = {
@@ -30,11 +30,12 @@
         EXPLOSION: 2
     };
 
+
     window.Game.Direction = {
-        North: 0,
-        South: 1,
-        East: 2,
-        West: 3
+        NORTH: 0,
+        SOUTH: 1,
+        EAST: 2,
+        WEST: 3
     };
 
     window.Game.TicksPerSecond = 60;

@@ -1,7 +1,7 @@
-﻿(function($, window) {
+﻿(function ($, window) {
     var MAP_WIDTH = 15,
      MAP_HEIGHT = 13,
-     TILE_SIZE = 32,
+     TILE_SIZE = 40,
      keyState = {},
      prevKeyState = {},
      inputId = 0,
@@ -19,7 +19,7 @@
     }
 
 
-    window.Game.Engine = function(assetManager) {
+    window.Game.Engine = function (assetManager) {
         this.assetManager = assetManager;
         this.players = {};
         this.ticks = 0;
@@ -60,6 +60,7 @@
     window.Game.Engine.prototype = {
         // methods
         onKeydown: function (e) {
+            //console.log(e.keyCode);
             keyState[e.keyCode] = true;
         },
         onKeyup: function (e) {
@@ -119,16 +120,15 @@
             }
 
             if ($.connection.hub.state === $.signalR.connectionState.connected) {
-                var game = $.connection.gameHub,
-                    updateTick = $.connection.hub.transport.name !== 'webSockets' ?
-                            Math.max(1, Math.floor(window.Game.TicksPerSecond / 5)) :
-                            1;
-              
+                var gameHub = $.connection.gameHub;
+                updateTick = $.connection.hub.transport.name !== 'webSockets' ?
+                        Math.max(1, Math.floor(window.Game.TicksPerSecond / 5)) :
+                        1;
+
                 if (this.ticks % updateTick === 0) {
                     var buffer = inputs.splice(0, inputs.length);
-                    console.log(buffer);
                     if (buffer.length > 0) {
-                        game.sendKeys(buffer);
+                        gameHub.server.sendKeys(buffer);
                         lastSentInputId = buffer[buffer.length - 1].id;
                     }
                 }
@@ -138,22 +138,21 @@
             var that = this, game = $.connection.gameHub;
 
             game.client.initializeMap = function (data) {
-                console.log(data);
                 that.map.fill(data);
             };
 
             game.client.initializePlayer = function (player) {
-                console.log(player);
                 var bomber = new window.Game.Bomber();
+              
                 that.playerIndex = player.Index;
                 that.players[player.Index] = bomber;
                 bomber.moveTo(player.X, player.Y);
                 that.addSprite(bomber);
 
 
-                // Create a ghost
+                //Create a ghost
                 //var ghost = new window.Game.Bomber(true);
-                //ghost.transparent = true;
+                //ghost.transparent = false;
                 //that.ghost = ghost;
                 //ghost.moveTo(player.X, player.Y);
                 //that.addSprite(ghost);
@@ -167,30 +166,29 @@
             //    }
             //};
 
-            game.client.initialize = function (players) {
-                for (var i = 0; i < players.length; ++i) {
-                    var player = players[i];
-                    if (that.players[player.Index]) {
-                        continue;
-                    }
+            //game.client.initialize = function (players) {
+            //    for (var i = 0; i < players.length; ++i) {
+            //        var player = players[i];
+            //        if (that.players[player.Index]) {
+            //            continue;
+            //        }
 
-                    var bomber = new window.Game.Bomber(false);
-                    that.players[player.Index] = bomber;
-                    bomber.moveTo(players[i].X, players[i].Y);
-                    that.addSprite(bomber);
-                }
-            };
+            //        var bomber = new window.Game.Bomber(false);
+            //        that.players[player.Index] = bomber;
+            //        bomber.moveTo(players[i].X, players[i].Y);
+            //        that.addSprite(bomber);
+            //    }
+            //};
 
             game.client.updatePlayerState = function (player) {
                 var sprite = null;
+                //console.log(player.Index === that.playerIndex);
                 if (player.Index === that.playerIndex) {
-                    sprite = that.ghost;
-                    lastProcessed = player.LastProcessed;
+                    sprite = that.players[player.Index];
                 }
                 else {
                     sprite = that.players[player.Index];
                 }
-
                 if (sprite) {
                     // Brute force
                     sprite.x = player.X;
@@ -202,6 +200,8 @@
                     sprite.directionY = player.DirectionY;
                     sprite.updateAnimation(that);
                 }
+               
+
             };
 
             $.connection.hub.logging = false;
@@ -223,9 +223,9 @@
                 prevKeyState[key] = keyState[key];
             }
 
-            window.Game.Logger.log('last input = ' + (inputId - 1));
-            window.Game.Logger.log('last sent input = ' + lastSentInputId);
-            window.Game.Logger.log('last server processed input = ' + lastProcessed);
+            //console.log('last input = ' + (inputId - 1));
+            //console.log('last sent input = ' + lastSentInputId);
+            //console.log('last server processed input = ' + lastProcessed);
         },
         movable: function (x, y) {
             if (y >= 0 && y < MAP_HEIGHT && x >= 0 && x < MAP_WIDTH) {

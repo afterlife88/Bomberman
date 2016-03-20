@@ -21,7 +21,7 @@
         this.directionX = 0;
         this.directionY = 0;
 
-        this.moving = false;
+        this.moving = true;
         this.activeFrameIndex = 0;
 
         this.direction = window.Game.Direction.SOUTH;
@@ -78,8 +78,8 @@
 
             this.updateAnimation(game);
 
-            if (game.inputManager.isKeyPress(window.Game.Keys.A) ||
-               game.inputManager.isKeyDown(window.Game.Keys.A)) {
+            if (game.inputManager.isKeyPress(window.Game.Keys.SPACE) ||
+               game.inputManager.isKeyDown(window.Game.Keys.SPACE)) {
                 this.createBomb(game);
             }
         },

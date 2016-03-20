@@ -17,6 +17,7 @@
         var context = canvas.getContext('2d');
         // images etc
         var assetManager = new window.Game.AssetManager();
+        // view engine
         var engine = new window.Game.Engine(assetManager);
         var renderer = new window.Game.Renderer(assetManager);
 

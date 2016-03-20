@@ -13,14 +13,15 @@ namespace BomberManUAWC.Hubs
 {
 	public class GameHub : Hub
 	{
-		private PlayerState _currentPlayerState = GetPlayer();
+		private static PlayerState _currentPlayerState = GetPlayer();
 		private static Point _initialPosition;
+		private string _connectionId;
 		private ConcurrentStack<Bomberman> allActiveObjects = new ConcurrentStack<Bomberman>();
 		public override Task OnConnected()
 		{
+			_connectionId = Context.ConnectionId;
 			// Initialize player who connected
 			Clients.Caller.initializeMap(ConstantValues.MapData).Wait();
-			Debug.WriteLine(_currentPlayerState.Player);
 			EnsureGameLoop();
 			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
 
@@ -32,10 +33,14 @@ namespace BomberManUAWC.Hubs
 		}
 		public void SendKeys(KeyboardState[] inputs)
 		{
-			foreach (var input in inputs)
+			lock (_currentPlayerState)
 			{
-				_currentPlayerState.Inputs.Enqueue(input);
+				foreach (var input in inputs)
+				{
+					_currentPlayerState.Inputs.Enqueue(input);
+				}
 			}
+			
 
 		}
 		private void RunGameLoop()
@@ -65,28 +70,33 @@ namespace BomberManUAWC.Hubs
 			if (_currentPlayerState.Inputs.TryDequeue(out input))
 			{
 				_currentPlayerState.Player.Update(input);
-				context.Clients.All.updatePlayerState(_currentPlayerState.Player);
+				context.Clients.Client(_connectionId).updatePlayerState(_currentPlayerState.Player);
 			}
 		}
 		private static PlayerState GetPlayer()
 		{
-			Player player = new Player();
-			_initialPosition = new Point(1, 1);
+			if (_currentPlayerState == null)
+			{
+				Player player = new Player();
+				_initialPosition = new Point(1, 1);
 
-			player.Index = 0;
-			player.X = _initialPosition.X;
-			player.Y = _initialPosition.Y;
-			player.ExactX = _initialPosition.X * ConstantValues.POWER;
-			player.ExactY = _initialPosition.Y * ConstantValues.POWER;
-			player.Direction = Direction.South;
-			
-			return new PlayerState() { Player = player, Inputs = new ConcurrentQueue<KeyboardState>()};
+				player.Index = 0;
+				player.X = _initialPosition.X;
+				player.Y = _initialPosition.Y;
+				player.ExactX = _initialPosition.X*ConstantValues.POWER;
+				player.ExactY = _initialPosition.Y*ConstantValues.POWER;
+				player.Direction = Direction.SOUTH;
+
+				return new PlayerState() {Player = player, Inputs = new ConcurrentQueue<KeyboardState>()};
+			}
+			return _currentPlayerState;
 		}
+
 		public override Task OnDisconnected(bool stopCalled)
 		{
 			_currentPlayerState = null;
 
-			return null;
+			return base.OnDisconnected(stopCalled);
 		}
 	}
 }

@@ -33,42 +33,42 @@ namespace GameEngine
 			int x = ExactX,
 				y = ExactY;
 
-			if (!input[Keys.Up])
+			if (!input[Keys.UP])
 			{
 				DirectionY = 0;
 			}
 
-			if (!input[Keys.Down])
+			if (!input[Keys.DOWN])
 			{
 				DirectionY = 0;
 			}
 
-			if (!input[Keys.Left])
+			if (!input[Keys.LEFT])
 			{
 				DirectionX = 0;
 			}
 
-			if (!input[Keys.Right])
+			if (!input[Keys.RIGHT])
 			{
 				DirectionX = 0;
 			}
 
-			if (input[Keys.Down])
+			if (input[Keys.DOWN])
 			{
 				DirectionY = 1;
 			}
 
-			if (input[Keys.Up])
+			if (input[Keys.UP])
 			{
 				DirectionY = -1;
 			}
 
-			if (input[Keys.Left])
+			if (input[Keys.LEFT])
 			{
 				DirectionX = -1;
 			}
 
-			if (input[Keys.Right])
+			if (input[Keys.RIGHT])
 			{
 				DirectionX = 1;
 			}
@@ -248,20 +248,20 @@ namespace GameEngine
 		{
 			if (x == -1)
 			{
-				Direction = Direction.West;
+				Direction = Direction.WEST;
 			}
 			else if (x == 1)
 			{
-				Direction = Direction.East;
+				Direction = Direction.EAST;
 			}
 
 			if (y == -1)
 			{
-				Direction = Direction.North;
+				Direction = Direction.NORTH;
 			}
 			else if (y == 1)
 			{
-				Direction = Direction.South;
+				Direction = Direction.SOUTH;
 			}
 		}
 
