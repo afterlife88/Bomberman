@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameEngine.Enums;
+﻿using GameEngine.Enums;
 
-namespace GameEngine
+namespace GameEngine.GameProcessor
 {
 	public class Map
 	{

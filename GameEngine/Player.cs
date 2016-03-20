@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameEngine.GameProcessor;
 
 namespace GameEngine
 {
-	class Player
+	/// <summary>
+	/// Class for manage player
+	/// </summary>
+	public class Player : Bombermans
 	{
+		
 	}
 }
