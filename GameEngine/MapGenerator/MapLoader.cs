@@ -1,11 +1,10 @@
 ﻿using System;
-using GameEngine.GameProcessor;
 
 namespace GameEngine.MapGenerator
 {
 	public sealed class MapLoader
 	{
-		private static volatile Map _instance;
+		private static volatile Map.Map _instance;
 		private static object syncRoot = new Object();
 
 
@@ -27,7 +26,7 @@ namespace GameEngine.MapGenerator
 		private static int height = 13;
 		private static int tileSize = 32;
 
-		public static Map GetMap
+		public static Map.Map GetMap
 		{
 			get
 			{
@@ -36,7 +35,7 @@ namespace GameEngine.MapGenerator
 					lock (syncRoot)
 					{
 						if (_instance == null)
-							_instance = new Map(mapData, width, height, tileSize);
+							_instance = new Map.Map(mapData, width, height, tileSize);
 					}
 				}
 

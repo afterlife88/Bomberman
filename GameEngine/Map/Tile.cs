@@ -1,4 +1,4 @@
-﻿namespace GameEngine.Enums
+﻿namespace GameEngine.Map
 {
 	/// <summary>
 	/// Obstacles of map

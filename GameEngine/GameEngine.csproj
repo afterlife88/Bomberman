@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -41,16 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bombermans.cs" />
+    <Compile Include="Bomberman.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Common\ConstantValues.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\Keys.cs" />
-    <Compile Include="Enums\Tile.cs" />
+    <Compile Include="Map\Tile.cs" />
     <Compile Include="KeyboardState.cs" />
-    <Compile Include="GameProcessor\Map.cs" />
+    <Compile Include="Map\Map.cs" />
     <Compile Include="MapGenerator\MapLoader.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="PlayerState.cs" />
+    <Compile Include="State.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

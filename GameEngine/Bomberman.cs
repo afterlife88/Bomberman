@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using GameEngine.Common;
 using GameEngine.Enums;
-using GameEngine.GameProcessor;
+using GameEngine.Map;
 using GameEngine.MapGenerator;
-using GameEngine.Utils;
 
 namespace GameEngine
 {
-	public class Bombermans
+	public class Bomberman
 	{
-		private static readonly Map Map = MapLoader.GetMap;
+		private static readonly Map.Map Map = MapLoader.GetMap;
 		private static readonly Point[] EastTargets = new Point[] { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
 		private static readonly Point[] WestTargets = new Point[] { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
 		private static readonly Point[] NorthTargets = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };

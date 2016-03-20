@@ -1,6 +1,4 @@
-﻿using GameEngine.Enums;
-
-namespace GameEngine.GameProcessor
+﻿namespace GameEngine.Map
 {
 	public class Map
 	{
