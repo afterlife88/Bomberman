@@ -6,31 +6,31 @@ namespace GameEngine
 	/// <summary>
 	/// State of 
 	/// </summary>
-	public abstract class State<T>
+	public abstract class State
 	{
 		public ConcurrentQueue<KeyboardState> Inputs { get; set; }
-		protected T Bomberman { get; set; }
+		protected Bomberman Bomberman { get; set; }
 	}
 
-	public class PlayerState : State<Player>
+	public class PlayerState : State
 	{
 		public Player Player
 		{
 			get
 			{
-				return Bomberman;
+				return Bomberman as Player;
 			}
 			set { Bomberman = value; }
 		}
 	}
 
-	public class EnemyState : State<Enemy>
+	public class EnemyState : State
 	{
 		public Enemy Enemy
 		{
 			get
 			{
-				return Bomberman;
+				return Bomberman as Enemy;
 			}
 			set { Bomberman = value; }
 		}

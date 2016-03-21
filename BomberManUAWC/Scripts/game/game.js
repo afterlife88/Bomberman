@@ -113,7 +113,7 @@
             }
         },
         sendKeyState: function () {
-            var player = this.players[this.playerIndex];
+            var player = this.players[0];
 
             if (!(empty(prevKeyState) && empty(keyState))) {
                 inputs.push({ keyState: $.extend({}, keyState), id: inputId++ });
@@ -127,7 +127,9 @@
 
                 if (this.ticks % updateTick === 0) {
                     var buffer = inputs.splice(0, inputs.length);
-                    if (buffer.length > 0) {
+                    if (buffer.length > 0 && player.hasMoved) {
+                        //console.log('sending data to server');
+                        player.hasMoved = false;
                         game.server.sendKeys(buffer);
                         lastSentInputId = buffer[buffer.length - 1].id;
                     }
@@ -143,14 +145,13 @@
 
             game.client.initializePlayer = function (player) {
                 var bomber = new window.Game.Bomber(true);
-              
                 that.playerIndex = player.Index;
                 that.players[player.Index] = bomber;
                 bomber.moveTo(player.X, player.Y);
                 that.addSprite(bomber);
 
 
-               // Create a ghost
+                // Create a ghost
                 //var ghost = new window.Game.Bomber(true);
                 //ghost.transparent = false;
                 //that.ghost = ghost;
@@ -166,23 +167,22 @@
                 }
             };
 
-            //game.client.initialize = function (players) {
-            //    for (var i = 0; i < players.length; ++i) {
-            //        var player = players[i];
-            //        if (that.players[player.Index]) {
-            //            continue;
-            //        }
+            game.client.initialize = function (enemies) {
+                for (var i = 0; i < enemies.length; ++i) {
+                    var enemy = enemies[i].Enemy;
 
-            //        var bomber = new window.Game.Bomber(false);
-            //        that.players[player.Index] = bomber;
-            //        bomber.moveTo(players[i].X, players[i].Y);
-            //        that.addSprite(bomber);
-            //    }
-            //};
+                    var bomber = new window.Game.Bomber(false);
+                    console.log(enemy.Index);
+                    that.players[enemy.Index] = bomber;
+                    bomber.moveTo(enemy.X, enemy.Y);
+                    that.addSprite(bomber);
+                }
+            };
             // recive when player location was updated
             game.client.updatePlayerState = function (player) {
+                console.log("зашло в метод");
                 var sprite = null;
-               // console.log(player);
+                // console.log(player);
                 if (player.Index === that.playerIndex) {
                     // sprite = that.ghost;
                     lastProcessed = player.LastProcessed;

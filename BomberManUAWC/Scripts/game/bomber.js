@@ -27,6 +27,8 @@
         this.direction = window.Game.Direction.SOUTH;
         this.bombs = 0;
         this.bombType = window.Game.Bombs.NORMAL;
+
+        this.hasMoved = false;
     };
 
     window.Game.Bomber.prototype = {
@@ -111,7 +113,16 @@
                 x += DELTA * this.directionX;
                 y += DELTA * this.directionY;
 
+                var oldX = this.x;
+                var oldY = this.y;
+
                 this.moveExact(game, x, y);
+
+                if (this.x !== oldX || this.y !== oldY) {
+                    this.hasMoved = true;
+                    //console.log('player has moved');
+
+                }
             }
 
             if (this.moving) {
