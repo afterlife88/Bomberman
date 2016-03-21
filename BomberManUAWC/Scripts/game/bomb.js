@@ -28,8 +28,8 @@
             // TODO: Add logic to base this on the bomb's power level
             game.addSprite(new window.Game.Explosion(this.x, this.y, 1));
             for (var i = 0; i < dirs.length; ++i) {
-                var dx = dirs[i][0],
-                    dy = dirs[i][1],
+                var dx = dirs[i][1],
+                    dy = dirs[i][0],
                     x = this.x + dx,
                     y = this.y + dy;
 

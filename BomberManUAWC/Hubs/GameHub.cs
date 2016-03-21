@@ -13,13 +13,16 @@ namespace BomberManUAWC.Hubs
 {
 	public class GameHub : Hub
 	{
-		private static PlayerState _currentPlayerState = GetPlayer();
+		private static PlayerState _currentPlayerState;
 		private static Point _initialPosition;
 		private string _connectionId;
+		private static int _gameLoopRunning;
 		private ConcurrentStack<Bomberman> allActiveObjects = new ConcurrentStack<Bomberman>();
+		
 		public override Task OnConnected()
 		{
 			_connectionId = Context.ConnectionId;
+			_currentPlayerState = GetPlayer();
 			// Initialize player who connected
 			Clients.Caller.initializeMap(ConstantValues.MapData).Wait();
 			EnsureGameLoop();
@@ -29,7 +32,10 @@ namespace BomberManUAWC.Hubs
 		}
 		private void EnsureGameLoop()
 		{
-			new Thread(_ => RunGameLoop()).Start();
+			if (Interlocked.Exchange(ref _gameLoopRunning, 1) == 0)
+			{
+				new Thread(_ => RunGameLoop()).Start();
+			}
 		}
 		public void SendKeys(KeyboardState[] inputs)
 		{
@@ -47,7 +53,7 @@ namespace BomberManUAWC.Hubs
 		{
 			var frameTicks = (int)Math.Round(1000.0 / ConstantValues.FPS);
 			var context = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-			var lastUpdate = 0;
+			var lastUpdate = Environment.TickCount;
 
 			while (true)
 			{
@@ -66,13 +72,24 @@ namespace BomberManUAWC.Hubs
 		}
 		private void Update(IHubContext context)
 		{
-			KeyboardState input;
-			if (_currentPlayerState.Inputs.TryDequeue(out input))
+			if (_currentPlayerState != null)
 			{
-				_currentPlayerState.Player.Update(input);
-				context.Clients.Client(_connectionId).updatePlayerState(_currentPlayerState.Player);
+				KeyboardState input;
+				if (_currentPlayerState.Inputs.TryDequeue(out input))
+				{
+					_currentPlayerState.Player.Update(input);
+					context.Clients.All.updatePlayerState(_currentPlayerState.Player);
+				}
 			}
 		}
+
+		public override Task OnDisconnected(bool stopCalled)
+		{ 
+			Clients.All.playerLeft(_currentPlayerState.Player);
+			_currentPlayerState = null;
+			return null;
+		}
+
 		private static PlayerState GetPlayer()
 		{
 			if (_currentPlayerState == null)
@@ -92,11 +109,11 @@ namespace BomberManUAWC.Hubs
 			return _currentPlayerState;
 		}
 
-		public override Task OnDisconnected(bool stopCalled)
-		{
-			_currentPlayerState = null;
+		//public override Task OnDisconnected(bool stopCalled)
+		//{
+		//	_currentPlayerState = null;
 
-			return base.OnDisconnected(stopCalled);
-		}
+		//	return base.OnDisconnected(stopCalled);
+		//}
 	}
 }

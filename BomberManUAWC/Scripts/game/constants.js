@@ -39,8 +39,8 @@
     };
 
     window.Game.TicksPerSecond = 60;
-    window.Game.Debugging = false;
-    window.Game.MoveSprites = false;
+    window.Game.Debugging = true;
+    window.Game.MoveSprites = true;
 
 
 })(jQuery, window);

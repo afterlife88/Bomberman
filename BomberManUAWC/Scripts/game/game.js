@@ -72,7 +72,7 @@
             if (this.map.get(x, y) === this.types.BRICK) {
                 this.map.set(x, y, this.types.GRASS);
 
-                this.addSprite(new window.Game.Powerup(x, y, 5, randomPower));
+                this.addSprite(new window.Game.Powerup(x, y, 10, randomPower));
             }
         },
         onExplosion: function (x, y) {
@@ -120,15 +120,15 @@
             }
 
             if ($.connection.hub.state === $.signalR.connectionState.connected) {
-                var gameHub = $.connection.gameHub;
-                updateTick = $.connection.hub.transport.name !== 'webSockets' ?
-                        Math.max(1, Math.floor(window.Game.TicksPerSecond / 5)) :
-                        1;
+                var game = $.connection.gameHub,
+                    updateTick = $.connection.hub.transport.name !== 'webSockets' ?
+                            Math.max(1, Math.floor(window.Game.TicksPerSecond / 5)) :
+                            1;
 
                 if (this.ticks % updateTick === 0) {
                     var buffer = inputs.splice(0, inputs.length);
                     if (buffer.length > 0) {
-                        gameHub.server.sendKeys(buffer);
+                        game.server.sendKeys(buffer);
                         lastSentInputId = buffer[buffer.length - 1].id;
                     }
                 }
@@ -142,7 +142,7 @@
             };
 
             game.client.initializePlayer = function (player) {
-                var bomber = new window.Game.Bomber();
+                var bomber = new window.Game.Bomber(true);
               
                 that.playerIndex = player.Index;
                 that.players[player.Index] = bomber;
@@ -150,7 +150,7 @@
                 that.addSprite(bomber);
 
 
-                //Create a ghost
+               // Create a ghost
                 //var ghost = new window.Game.Bomber(true);
                 //ghost.transparent = false;
                 //that.ghost = ghost;
@@ -158,13 +158,13 @@
                 //that.addSprite(ghost);
             };
 
-            //.playerLeft = function (player) {
-            //    var bomber = that.players[player.Index];
-            //    if (bomber) {
-            //        that.removeSprite(bomber);
-            //        that.players[player.Index] = null;
-            //    }
-            //};
+            game.client.playerLeft = function (player) {
+                var bomber = that.players[player.Index];
+                if (bomber) {
+                    that.removeSprite(bomber);
+                    that.players[player.Index] = null;
+                }
+            };
 
             //game.client.initialize = function (players) {
             //    for (var i = 0; i < players.length; ++i) {
@@ -179,29 +179,29 @@
             //        that.addSprite(bomber);
             //    }
             //};
-
+            // recive when player location was updated
             game.client.updatePlayerState = function (player) {
                 var sprite = null;
-                //console.log(player.Index === that.playerIndex);
+               // console.log(player);
                 if (player.Index === that.playerIndex) {
-                    sprite = that.players[player.Index];
+                    // sprite = that.ghost;
+                    lastProcessed = player.LastProcessed;
                 }
                 else {
                     sprite = that.players[player.Index];
                 }
-                if (sprite) {
-                    // Brute force
-                    sprite.x = player.X;
-                    sprite.y = player.Y;
-                    sprite.exactX = player.ExactX;
-                    sprite.exactY = player.ExactY;
-                    sprite.direction = player.Direction;
-                    sprite.directionX = player.DirectionX;
-                    sprite.directionY = player.DirectionY;
-                    sprite.updateAnimation(that);
-                }
-               
 
+                //if (sprite) {
+                //    // Brute force
+                //    sprite.x = player.X;
+                //    sprite.y = player.Y;
+                //    sprite.exactX = player.ExactX;
+                //    sprite.exactY = player.ExactY;
+                //    sprite.direction = player.Direction;
+                //    sprite.directionX = player.DirectionX;
+                //    sprite.directionY = player.DirectionY;
+                //    sprite.updateAnimation(that);
+                //}
             };
 
             $.connection.hub.logging = false;
@@ -223,9 +223,9 @@
                 prevKeyState[key] = keyState[key];
             }
 
-            //console.log('last input = ' + (inputId - 1));
-            //console.log('last sent input = ' + lastSentInputId);
-            //console.log('last server processed input = ' + lastProcessed);
+            window.Game.Logger.log('last input = ' + (inputId - 1));
+            window.Game.Logger.log('last sent input = ' + lastSentInputId);
+            window.Game.Logger.log('last server processed input = ' + lastProcessed);
         },
         movable: function (x, y) {
             if (y >= 0 && y < MAP_HEIGHT && x >= 0 && x < MAP_WIDTH) {

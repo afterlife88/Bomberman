@@ -41,7 +41,7 @@
     });
 
     function animate(engine, renderer, canvas, context) {
-        //window.Game.Logger.clear();
+        window.Game.Logger.clear();
         //window.Game.Logger.log('FPS = ' + window.Game.TicksPerSecond);
 
         engine.update();

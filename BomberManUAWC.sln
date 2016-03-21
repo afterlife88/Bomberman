@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BomberManUAWC", "BomberManU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "GameEngine\GameEngine.csproj", "{18852D03-3F01-4E22-B61C-4926DDA12DBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameHub.Test", "GameHub.Test\GameHub.Test.csproj", "{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{18852D03-3F01-4E22-B61C-4926DDA12DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18852D03-3F01-4E22-B61C-4926DDA12DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18852D03-3F01-4E22-B61C-4926DDA12DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
