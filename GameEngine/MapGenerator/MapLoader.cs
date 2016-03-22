@@ -18,11 +18,6 @@ namespace GameEngine.MapGenerator
 			string s = new string(array);
 			return s;
 		}
-
-		private static int width = 15;
-		private static int height = 13;
-		private static int tileSize = 40;
-
 		public static Map.Map GetMap
 		{
 			get
@@ -32,7 +27,7 @@ namespace GameEngine.MapGenerator
 					lock (syncRoot)
 					{
 						if (_instance == null)
-							_instance = new Map.Map(ConstantValues.MapData, width, height, tileSize);
+							_instance = new Map.Map(ConstantValues.MapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
 					}
 				}
 

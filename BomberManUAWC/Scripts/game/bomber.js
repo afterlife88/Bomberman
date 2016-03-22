@@ -124,7 +124,6 @@
 
                 }
             }
-
             if (this.moving) {
                 var frameRate = Math.floor(window.Game.TicksPerSecond / 2);
                 this.movingTicks++;

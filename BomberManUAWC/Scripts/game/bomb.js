@@ -1,6 +1,6 @@
 ﻿(function ($, window) {
     var directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-    var radius = 3;
+    var radius = 2;
 
     window.Game.Bomb = function (x, y, duration, power, bombType, player) {
         this.x = x;

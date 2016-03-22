@@ -20,6 +20,7 @@ namespace BomberManUAWC.Hubs
 	{
 		private static PlayerState _currentPlayerState;
 		private static ICollection<EnemyState> _enemyStates;
+
 		private static int _gameLoopRunning;
 		private List<State> allActiveObjects = new List<State>();
 

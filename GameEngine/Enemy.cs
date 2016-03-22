@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using GameEngine.Enums;
 
 namespace GameEngine
@@ -24,6 +22,8 @@ namespace GameEngine
 
 		private IEnumerator<KeyboardState> GetBehaviour()
 		{
+			//var map = MapLoader.GetMap;
+			//var getCurrentPlace = map[this.X, this.Y];
 			Dictionary<Keys, bool> dictionaryUp;
 
 			while (true)
@@ -42,7 +42,7 @@ namespace GameEngine
 				if (num <= 25) //25%
 				{
 					dictionaryUp[Keys.LEFT] = true;
-					
+
 					for (int i = 0; i < 12; i++)
 					{
 						int randomNumber = _random.Next(0, 100);
@@ -80,7 +80,7 @@ namespace GameEngine
 					{
 						int randomNumber = _random.Next(0, 100);
 						var ks = new KeyboardState(dictionaryUp, randomNumber);
-						
+
 						yield return ks;
 					}
 				}

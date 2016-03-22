@@ -128,8 +128,8 @@
                 if (this.ticks % updateTick === 0) {
                     var buffer = inputs.splice(0, inputs.length);
                     if (buffer.length > 0 && player.hasMoved) {
-                        //console.log('sending data to server');
                         player.hasMoved = false;
+                        // send state to server
                         game.server.sendKeys(buffer);
                         lastSentInputId = buffer[buffer.length - 1].id;
                     }
@@ -149,14 +149,6 @@
                 that.players[player.Index] = bomber;
                 bomber.moveTo(player.X, player.Y);
                 that.addSprite(bomber);
-
-
-                // Create a ghost
-                //var ghost = new window.Game.Bomber(true);
-                //ghost.transparent = false;
-                //that.ghost = ghost;
-                //ghost.moveTo(player.X, player.Y);
-                //that.addSprite(ghost);
             };
 
             game.client.playerLeft = function (player) {
