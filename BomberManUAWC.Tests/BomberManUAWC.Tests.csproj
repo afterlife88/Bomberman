@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D50CE010-74EA-4AE6-A594-D1DCA0D8BB54}</ProjectGuid>
+    <ProjectGuid>{3FA4CC92-DF8B-454C-A59E-0AC588A1DF33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameHub.Test</RootNamespace>
-    <AssemblyName>GameHub.Test</AssemblyName>
+    <RootNamespace>BomberManUAWC.Tests</RootNamespace>
+    <AssemblyName>BomberManUAWC.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

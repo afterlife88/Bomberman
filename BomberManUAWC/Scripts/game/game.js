@@ -72,7 +72,7 @@
             if (this.map.get(x, y) === this.types.BRICK) {
                 this.map.set(x, y, this.types.GRASS);
 
-                this.addSprite(new window.Game.Powerup(x, y, 10, randomPower));
+                this.addSprite(new window.Game.Powerup(x, y, 1, randomPower));
             }
         },
         onExplosion: function (x, y) {

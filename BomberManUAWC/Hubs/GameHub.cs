@@ -66,7 +66,7 @@ namespace BomberManUAWC.Hubs
 
 		private void RunGameLoop()
 		{
-			var frameTicks = (int)Math.Round(1000.0 / ConstantValues.FPS);
+			var frameTicks = (int)Math.Round(1000.0 / ConstantValues.Fps);
 			var context = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
 			var lastUpdate = Environment.TickCount;
 
@@ -145,15 +145,18 @@ namespace BomberManUAWC.Hubs
 				player.Index = 0;
 				player.X = initialPosition.X;
 				player.Y = initialPosition.Y;
-				player.ExactX = initialPosition.X * ConstantValues.POWER;
-				player.ExactY = initialPosition.Y * ConstantValues.POWER;
+				player.ExactX = initialPosition.X * ConstantValues.Power;
+				player.ExactY = initialPosition.Y * ConstantValues.Power;
 				player.Direction = Direction.SOUTH;
 
 				return new PlayerState { Player = player, Inputs = new ConcurrentQueue<KeyboardState>() };
 			}
 			return _currentPlayerState;
 		}
-
+		/// <summary>
+		/// Init position of bots
+		/// </summary>
+		/// <returns></returns>
 		private static List<EnemyState> SetNewEnemyState()
 		{
 			var listOfStates = new List<EnemyState>();
@@ -170,8 +173,8 @@ namespace BomberManUAWC.Hubs
 						Index = i+1,
 						X = initialEnemyPositions[i].X,
 						Y = initialEnemyPositions[i].Y,
-						ExactX = initialEnemyPositions[i].X * ConstantValues.POWER,
-						ExactY = initialEnemyPositions[i].Y * ConstantValues.POWER,
+						ExactX = initialEnemyPositions[i].X * ConstantValues.Power,
+						ExactY = initialEnemyPositions[i].Y * ConstantValues.Power,
 						Direction = Direction.SOUTH
 					},
 					Inputs = new ConcurrentQueue<KeyboardState>()

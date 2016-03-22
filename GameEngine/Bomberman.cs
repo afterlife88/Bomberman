@@ -12,10 +12,10 @@ namespace GameEngine
 	public class Bomberman
 	{
 		private static readonly Map.Map Map = MapLoader.GetMap;
-		private static readonly Point[] EastTargets = new Point[] { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
-		private static readonly Point[] WestTargets = new Point[] { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
-		private static readonly Point[] NorthTargets = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };
-		private static readonly Point[] SouthTargets = new Point[] { new Point(-1, 1), new Point(0, 1), new Point(1, 1) };
+		private static readonly Point[] EastTargets = { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
+		private static readonly Point[] WestTargets = { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
+		private static readonly Point[] NorthTargets = { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };
+		private static readonly Point[] SouthTargets = { new Point(-1, 1), new Point(0, 1), new Point(1, 1) };
 		public int X { get; set; }
 		public int Y { get; set; }
 		public int ExactX { get; set; }
@@ -76,19 +76,19 @@ namespace GameEngine
 
 			SetDirection(DirectionX, DirectionY);
 
-			x += DirectionX * ConstantValues.DELTA;
-			y += DirectionY * ConstantValues.DELTA;
+			x += DirectionX * ConstantValues.Delta;
+			y += DirectionY * ConstantValues.Delta;
 
 			MoveExact(x, y);
 		}
 
 		private void MoveExact(int x, int y)
 		{
-			float effectiveX = x / (ConstantValues.POWER * 1f),
-				  effectiveY = y / (ConstantValues.POWER * 1f);
+			float effectiveX = x / (ConstantValues.Power * 1f),
+				  effectiveY = y / (ConstantValues.Power * 1f);
 
-			var actualX = (int)Math.Floor((float)(x + (ConstantValues.POWER / 2)) / ConstantValues.POWER);
-			var actualY = (int)Math.Floor((float)(y + (ConstantValues.POWER / 2)) / ConstantValues.POWER);
+			var actualX = (int)Math.Floor((float)(x + (ConstantValues.Power / 2)) / ConstantValues.Power);
+			var actualY = (int)Math.Floor((float)(y + (ConstantValues.Power / 2)) / ConstantValues.Power);
 			var targets = GetHitTargets();
 			var sourceLeft = effectiveX * Map.TileSize;
 			var sourceTop = effectiveY * Map.TileSize;
@@ -154,8 +154,8 @@ namespace GameEngine
 					for (int i = 0; i < candidates.Count; ++i)
 					{
 						var targetCandidate = candidates[i];
-						int xs = (ExactX - candidates[i].Item3.X * ConstantValues.POWER);
-						int ys = (ExactY - candidates[i].Item3.Y * ConstantValues.POWER);
+						int xs = (ExactX - candidates[i].Item3.X * ConstantValues.Power);
+						int ys = (ExactY - candidates[i].Item3.Y * ConstantValues.Power);
 						int distance = xs * xs + ys * ys;
 
 						if (distance < minDistance)
@@ -168,8 +168,8 @@ namespace GameEngine
 
 				if (candidate != null)
 				{
-					var diffX = candidate.Item3.X * ConstantValues.POWER - ExactX;
-					var diffY = candidate.Item3.Y * ConstantValues.POWER - ExactY;
+					var diffX = candidate.Item3.X * ConstantValues.Power - ExactX;
+					var diffY = candidate.Item3.Y * ConstantValues.Power - ExactY;
 					var absX = Math.Abs(diffX);
 					var absY = Math.Abs(diffY);
 					int effectiveDirectionX = 0;
@@ -201,16 +201,16 @@ namespace GameEngine
 
 					SetDirection(effectiveDirectionX, effectiveDirectionY);
 
-					ExactX += ConstantValues.DELTA * effectiveDirectionX;
+					ExactX += ConstantValues.Delta * effectiveDirectionX;
 					X = actualX;
 
-					ExactY += ConstantValues.DELTA * effectiveDirectionY;
+					ExactY += ConstantValues.Delta * effectiveDirectionY;
 					Y = actualY;
 				}
 				else
 				{
-					var diffY = (collisions[0].Y * ConstantValues.POWER - ExactY);
-					var diffX = (collisions[0].X * ConstantValues.POWER - ExactX);
+					var diffY = (collisions[0].Y * ConstantValues.Power - ExactY);
+					var diffX = (collisions[0].X * ConstantValues.Power - ExactX);
 					var absX = Math.Abs(diffX);
 					var absY = Math.Abs(diffY);
 					int effectiveDirectionX = 0;
@@ -228,8 +228,8 @@ namespace GameEngine
 
 					SetDirection(effectiveDirectionX, effectiveDirectionY);
 
-					ExactX += ConstantValues.DELTA * effectiveDirectionX;
-					ExactY += ConstantValues.DELTA * effectiveDirectionY;
+					ExactX += ConstantValues.Delta * effectiveDirectionX;
+					ExactY += ConstantValues.Delta * effectiveDirectionY;
 				}
 			}
 		}

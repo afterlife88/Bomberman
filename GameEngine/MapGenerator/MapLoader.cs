@@ -7,19 +7,17 @@ namespace GameEngine.MapGenerator
 	{
 		private static volatile Map.Map _instance;
 		private static object syncRoot = new Object();
-		//static string mapData = "222222222222222" +
-		//                        "200000000000002" +
-		//                        "202020202020202" +
-		//                        "200000000000002" +
-		//                        "202020202020202" +
-		//                        "200000000000002" +
-		//                        "202020202020202" +
-		//                        "200000000000002" +
-		//                        "202020202020202" +
-		//                        "200000000000002" +
-		//                        "200020202020202" +
-		//                        "200000000000002" +
-		//                        "222222222222222";
+
+		public string GenerateMap(string mapWithoutBricks)
+		{
+			var array = mapWithoutBricks.ToCharArray();
+			for (int i = 0; i < array.Length; i++)
+			{
+					
+			}
+			string s = new string(array);
+			return s;
+		}
 
 		private static int width = 15;
 		private static int height = 13;

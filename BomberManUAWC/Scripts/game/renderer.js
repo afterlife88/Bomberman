@@ -22,7 +22,7 @@
                             context.fillStyle = '#bebebe';
                             break;
                         case game.types.BRICK:
-                            context.fillStyle = '#cecece';
+                            context.fillStyle = 'orange';
                             break;
                     }
 
@@ -92,10 +92,6 @@
                                           height);
 
                         context.globalAlpha = 1.0;
-                        break;
-                    case window.Game.Sprites.POWERUP:
-                        context.fillStyle = 'orange';
-                        context.fillRect(sprite.x * game.map.tileSize, sprite.y * game.map.tileSize, game.map.tileSize, game.map.tileSize);
                         break;
                 }
             }
