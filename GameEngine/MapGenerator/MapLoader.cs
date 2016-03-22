@@ -1,22 +1,43 @@
 ﻿using System;
+using System.Linq;
 using GameEngine.Common;
+using GameEngine.Map;
 
 namespace GameEngine.MapGenerator
 {
 	public sealed class MapLoader
 	{
 		private static volatile Map.Map _instance;
-		private static object syncRoot = new Object();
+		private static readonly object SyncRoot = new Object();
+		private static  string _generatedStringMap;
 
-		public string GenerateMap(string mapWithoutBricks)
+		private static int[][] GenerateMap(int[][] ar)
 		{
-			var array = mapWithoutBricks.ToCharArray();
-			for (int i = 0; i < array.Length; i++)
+			Random rand = new Random();
+			for (int i = 1; i < ar.Length - 1; i++)
 			{
-					
+				for (int j = 1; j < ar[i].Length - 1; j++)
+				{
+					if (i % 2 == 0 && j % 2 == 0)
+						ar[i][j] = (int)Tile.Wall;
+					else if (rand.Next(9) == 8)
+						ar[i][j] = (int)Tile.Brick;
+				}
+
 			}
-			string s = new string(array);
-			return s;
+			return ar;
+		}
+
+		public static string GetMapData
+		{
+			get
+			{
+				if (_generatedStringMap == null)
+				{
+					_generatedStringMap = ArrToString(GenerateMap(ConstantValues.MapArray));;
+				}
+				return _generatedStringMap;;
+			}
 		}
 		public static Map.Map GetMap
 		{
@@ -24,15 +45,19 @@ namespace GameEngine.MapGenerator
 			{
 				if (_instance == null)
 				{
-					lock (syncRoot)
+					lock (SyncRoot)
 					{
 						if (_instance == null)
-							_instance = new Map.Map(ConstantValues.MapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
+							_instance = new Map.Map(GetMapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
 					}
 				}
 
 				return _instance;
 			}
+		}
+		private static string ArrToString(int[][] ar)
+		{
+			return string.Join("", ar.Select(arr => string.Join("", arr)));
 		}
 	}
 }

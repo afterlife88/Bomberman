@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using GameEngine;
 using GameEngine.Common;
 using GameEngine.Enums;
+using GameEngine.MapGenerator;
 using Microsoft.AspNet.SignalR;
 
 namespace BomberManUAWC.Hubs
@@ -32,7 +33,7 @@ namespace BomberManUAWC.Hubs
 			// add all enemys
 			allActiveObjects.AddRange(_enemyStates);
 			// Initialize player who connected with map
-			Clients.Caller.initializeMap(ConstantValues.MapData).Wait();
+			Clients.Caller.initializeMap(MapLoader.GetMapData).Wait();
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
