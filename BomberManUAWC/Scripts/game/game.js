@@ -172,38 +172,38 @@
                     var enemy = enemies[i].Enemy;
 
                     var bomber = new window.Game.Bomber(false);
+                    bomber.power = 14;
+                    bomber.speed = 25;
                     console.log(enemy.Index);
                     that.players[enemy.Index] = bomber;
                     bomber.moveTo(enemy.X, enemy.Y);
                     that.addSprite(bomber);
+
                 }
+                console.log(that.players);
             };
-            // recive when player location was updated
+            
             game.client.updatePlayerState = function (player) {
-                console.log("зашло в метод");
-                var sprite = null;
-                // console.log(player);
-                if (player.Index === that.playerIndex) {
-                    // sprite = that.ghost;
-                    lastProcessed = player.LastProcessed;
-                }
-                else {
-                    sprite = that.players[player.Index];
-                }
-
-                //if (sprite) {
-                //    // Brute force
-                //    sprite.x = player.X;
-                //    sprite.y = player.Y;
-                //    sprite.exactX = player.ExactX;
-                //    sprite.exactY = player.ExactY;
-                //    sprite.direction = player.Direction;
-                //    sprite.directionX = player.DirectionX;
-                //    sprite.directionY = player.DirectionY;
-                //    sprite.updateAnimation(that);
-                //}
+                // recive last processed input on server
+                lastProcessed = player.LastProcessed;
             };
-
+            game.client.updateEnemyStates = function (enemies) {
+                var sprite = null;
+                for (var i = 0; i < enemies.length; i++) {
+                    sprite = that.players[enemies[i].Enemy.Index];
+                    if (sprite) {
+                        // Brute force
+                        sprite.x = enemies[i].Enemy.X;
+                        sprite.y = enemies[i].Enemy.Y;
+                        sprite.exactX = enemies[i].Enemy.ExactX;
+                        sprite.exactY = enemies[i].Enemy.ExactY;
+                        sprite.direction = enemies[i].Enemy.Direction;
+                        sprite.directionX = enemies[i].Enemy.DirectionX;
+                        sprite.directionY = enemies[i].Enemy.DirectionY;
+                        sprite.updateAnimation(that);
+                    }
+                }
+            }
             $.connection.hub.logging = false;
             $.connection.hub.url = 'http://localhost:61536/signalr';
             $.connection.hub.start();

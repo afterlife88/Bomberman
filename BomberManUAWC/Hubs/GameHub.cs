@@ -76,11 +76,11 @@ namespace BomberManUAWC.Hubs
 				if (delta < 0)
 				{
 					lastUpdate = Environment.TickCount;
-					var a = Stopwatch.StartNew();
+					//var a = Stopwatch.StartNew();
 					Update(context);
 				
-					a.Stop();
-					Debug.WriteLine(a.ElapsedMilliseconds);
+					//a.Stop();
+					//Debug.WriteLine(a.ElapsedMilliseconds);
 					
 				}
 				else
@@ -105,18 +105,18 @@ namespace BomberManUAWC.Hubs
 					context.Clients.All.updatePlayerState(_currentPlayerState.Player);
 				}
 			}
-			//if (_enemyStates.Count > 0)
-			//{
-			//	foreach (var enemyState in _enemyStates)
-			//	{
-			//		var input = enemyState.Enemy.GetNextMove();
-			//		enemyState.Enemy.Update(input);
+			if (_enemyStates.Count > 0)
+			{
+				foreach (var enemyState in _enemyStates)
+				{
+					var input = enemyState.Enemy.GetNextMove();
+					enemyState.Enemy.Update(input);
 
-			//	}
-			//	// Update enemies on client
-			//	//context.Clients.All.updateEnemyStates(_enemyStates);
+				}
+				// Update enemies on clientclient.updateEnemyStates
+				context.Clients.All.updateEnemyStates(_enemyStates);
 
-			//}
+			}
 		}
 
 		/// <summary>
@@ -144,7 +144,7 @@ namespace BomberManUAWC.Hubs
 
 				player.Index = 0;
 				player.X = initialPosition.X;
-				player.Y = initialPosition.Y;
+				player.Y= initialPosition.Y;
 				player.ExactX = initialPosition.X * ConstantValues.Power;
 				player.ExactY = initialPosition.Y * ConstantValues.Power;
 				player.Direction = Direction.SOUTH;

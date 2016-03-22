@@ -19,6 +19,10 @@ namespace GameEngine
 			_keyState = keyState;
 			Id = id;
 		}
+		//public KeyboardState(Dictionary<Keys, bool> keyState)
+		//{
+		//	_keyState = keyState;
+		//}
 		public bool this[Keys key] => _keyState[key];
 
 		public bool Empty

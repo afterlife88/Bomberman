@@ -1,5 +1,6 @@
 ﻿(function ($, window) {
-    var dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    var directions = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+    var radius = 3;
 
     window.Game.Bomb = function (x, y, duration, power, bombType, player) {
         this.x = x;
@@ -27,14 +28,18 @@
 
             // TODO: Add logic to base this on the bomb's power level
             game.addSprite(new window.Game.Explosion(this.x, this.y, 1));
-            for (var i = 0; i < dirs.length; ++i) {
-                var dx = dirs[i][1],
-                    dy = dirs[i][0],
-                    x = this.x + dx,
-                    y = this.y + dy;
-
-                if (game.canDestroy(x, y)) {
-                    game.addSprite(new window.Game.Explosion(x, y, 1));
+            for (var i = 0; i < directions.length; ++i) {
+                var dir = directions[i];
+                for (var j = 1; j <= radius; j++) {
+                    var dx = dir[0] * j,
+                      dy = dir[1] * j,
+                      x = this.x + dx,
+                      y = this.y + dy;
+                    if (game.canDestroy(x, y)) {
+                        game.addSprite(new window.Game.Explosion(x, y, 1));
+                    } else {
+                        break;
+                    }
                 }
             }
         }
