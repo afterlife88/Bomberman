@@ -140,6 +140,7 @@
             var that = this, game = $.connection.gameHub;
 
             game.client.initializeMap = function (data) {
+                console.log(data);
                 that.map.fill(data);
             };
 
@@ -164,8 +165,6 @@
                     var enemy = enemies[i].Enemy;
 
                     var bomber = new window.Game.Bomber(false);
-                    bomber.power = 14;
-                    bomber.speed = 25;
                     console.log(enemy.Index);
                     that.players[enemy.Index] = bomber;
                     bomber.moveTo(enemy.X, enemy.Y);
@@ -174,7 +173,7 @@
                 }
                 console.log(that.players);
             };
-            
+
             game.client.updatePlayerState = function (player) {
                 // recive last processed input on server
                 lastProcessed = player.LastProcessed;
@@ -183,6 +182,7 @@
                 var sprite = null;
                 for (var i = 0; i < enemies.length; i++) {
                     sprite = that.players[enemies[i].Enemy.Index];
+                    
                     if (sprite) {
                         // Brute force
                         sprite.x = enemies[i].Enemy.X;
@@ -192,8 +192,12 @@
                         sprite.direction = enemies[i].Enemy.Direction;
                         sprite.directionX = enemies[i].Enemy.DirectionX;
                         sprite.directionY = enemies[i].Enemy.DirectionY;
+                        if (enemies[i].Enemy.BombSet) {
+                            sprite.createBomb(that);
+                        }
                         sprite.updateAnimation(that);
                     }
+                    
                 }
             }
             $.connection.hub.logging = false;

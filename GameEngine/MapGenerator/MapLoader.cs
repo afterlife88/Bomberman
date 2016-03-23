@@ -20,7 +20,7 @@ namespace GameEngine.MapGenerator
 				{
 					if (i % 2 == 0 && j % 2 == 0)
 						ar[i][j] = (int)Tile.Wall;
-					else if (rand.Next(9) == 8)
+					else if (rand.Next(6) == 5)
 						ar[i][j] = (int)Tile.Brick;
 				}
 

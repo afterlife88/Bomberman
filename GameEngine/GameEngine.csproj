@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bomb.cs" />
     <Compile Include="Bomberman.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Common\ConstantValues.cs" />

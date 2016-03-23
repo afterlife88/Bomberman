@@ -80,10 +80,10 @@ namespace BomberManUAWC.Hubs
 					lastUpdate = Environment.TickCount;
 					//var a = Stopwatch.StartNew();
 					Update(context);
-				
+
 					//a.Stop();
 					//Debug.WriteLine(a.ElapsedMilliseconds);
-					
+
 				}
 				else
 				{
@@ -113,7 +113,6 @@ namespace BomberManUAWC.Hubs
 				{
 					var input = enemyState.Enemy.GetNextMove();
 					enemyState.Enemy.Update(input);
-
 				}
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
@@ -146,7 +145,7 @@ namespace BomberManUAWC.Hubs
 
 				player.Index = 0;
 				player.X = initialPosition.X;
-				player.Y= initialPosition.Y;
+				player.Y = initialPosition.Y;
 				player.ExactX = initialPosition.X * ConstantValues.Power;
 				player.ExactY = initialPosition.Y * ConstantValues.Power;
 				player.Direction = Direction.SOUTH;
@@ -172,7 +171,7 @@ namespace BomberManUAWC.Hubs
 				{
 					Enemy = new Enemy()
 					{
-						Index = i+1,
+						Index = i + 1,
 						X = initialEnemyPositions[i].X,
 						Y = initialEnemyPositions[i].Y,
 						ExactX = initialEnemyPositions[i].X * ConstantValues.Power,

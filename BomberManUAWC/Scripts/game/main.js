@@ -19,6 +19,7 @@
         var assetManager = new window.Game.AssetManager();
         // view engine
         var engine = new window.Game.Engine(assetManager);
+        //window.engine = engine;
         var renderer = new window.Game.Renderer(assetManager);
 
         engine.initialize();

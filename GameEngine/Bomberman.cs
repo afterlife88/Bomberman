@@ -25,7 +25,8 @@ namespace GameEngine
 		public Direction Direction { get; set; }
 		public int Index { get; set; }
 		public int LastProcessed { get; set; }
-
+		private int MaxBombs { get; set; } = 1;
+		private int Bombs { get; set; }
 		public void Update(KeyboardState input)
 		{
 			
@@ -73,6 +74,10 @@ namespace GameEngine
 			{
 				DirectionX = 1;
 			}
+			if (input[Keys.SPACE])
+			{
+				CreateBomb();
+			}
 
 			SetDirection(DirectionX, DirectionY);
 
@@ -82,6 +87,21 @@ namespace GameEngine
 			MoveExact(x, y);
 		}
 
+		private void CreateBomb()
+		{
+			if (this.Bombs >= this.MaxBombs)
+			{
+				return;
+			}
+			new Bomb(this.X, this.Y, this);
+			Bombs++;
+
+		}
+
+		public void RemoveBomb()
+		{
+			Bombs--;
+		}
 		private void MoveExact(int x, int y)
 		{
 			float effectiveX = x / (ConstantValues.Power * 1f),

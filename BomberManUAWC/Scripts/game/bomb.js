@@ -26,7 +26,6 @@
             this.player.removeBomb();
             game.removeSprite(this);
 
-            // TODO: Add logic to base this on the bomb's power level
             game.addSprite(new window.Game.Explosion(this.x, this.y, 1));
             for (var i = 0; i < directions.length; ++i) {
                 var dir = directions[i];

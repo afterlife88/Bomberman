@@ -8,7 +8,7 @@ namespace GameEngine
 	{
 		private static Random _random = new Random();
 		private readonly IEnumerator<KeyboardState> _behaviour;
-
+		public bool BombSet { get; set; }
 		public Enemy()
 		{
 			_behaviour = GetBehaviour();
@@ -38,6 +38,7 @@ namespace GameEngine
 					[Keys.RIGHT] = false,
 					[Keys.SPACE] = false
 				};
+				BombSet = false;
 
 				if (num <= 25) //25%
 				{
@@ -74,13 +75,13 @@ namespace GameEngine
 				}
 				if (num > 75 && num <= 100)
 				{
-					dictionaryUp[Keys.DOWN] = true;
+					dictionaryUp[Keys.SPACE] = true;
 
 					for (int i = 0; i < 12; i++)
 					{
 						int randomNumber = _random.Next(0, 100);
 						var ks = new KeyboardState(dictionaryUp, randomNumber);
-
+						BombSet = true;
 						yield return ks;
 					}
 				}

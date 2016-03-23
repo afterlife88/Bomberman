@@ -29,6 +29,7 @@
         this.bombType = window.Game.Bombs.NORMAL;
 
         this.hasMoved = false;
+        this.placedBomb = false;
     };
 
     window.Game.Bomber.prototype = {
@@ -36,7 +37,7 @@
             if (this.bombs >= this.maxBombs) {
                 return;
             }
-
+            this.placedBomb = true;
             this.bombs++;
             var bomb = new window.Game.Bomb(this.x, this.y, 3, this.power, this.bombType, this);
             game.addSprite(bomb);
@@ -118,7 +119,7 @@
 
                 this.moveExact(game, x, y);
 
-                if (this.x !== oldX || this.y !== oldY) {
+                if (this.x !== oldX || this.y !== oldY || this.placedBomb) {
                     this.hasMoved = true;
                     //console.log('player has moved');
 
@@ -251,7 +252,7 @@
                 }
             }
 
-            if (collisions.length == 0) {
+            if (collisions.length === 0) {
                 if (window.Game.MoveSprites) {
                     this.x = actualX;
                     this.y = actualY;
