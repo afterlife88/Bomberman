@@ -93,7 +93,7 @@ namespace GameEngine
 			{
 				return;
 			}
-			new Bomb(this.X, this.Y, this);
+			new Bomb(X, this.Y, this);
 			Bombs++;
 
 		}

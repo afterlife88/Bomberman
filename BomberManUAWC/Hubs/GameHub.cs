@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameEngine;
 using GameEngine.Common;
 using GameEngine.Enums;
+using GameEngine.Map;
 using GameEngine.MapGenerator;
 using Microsoft.AspNet.SignalR;
 
@@ -20,8 +19,8 @@ namespace BomberManUAWC.Hubs
 	public class GameHub : Hub
 	{
 		private static PlayerState _currentPlayerState;
-		private static ICollection<EnemyState> _enemyStates;
-
+		private static List<EnemyState> _enemyStates;
+		private Map Map = MapLoader.GetMap;
 		private static int _gameLoopRunning;
 		private List<State> allActiveObjects = new List<State>();
 
@@ -74,16 +73,11 @@ namespace BomberManUAWC.Hubs
 
 			while (true)
 			{
-				int delta = (lastUpdate + frameTicks) - Environment.TickCount;
+				var delta = (lastUpdate + frameTicks) - Environment.TickCount;
 				if (delta < 0)
 				{
 					lastUpdate = Environment.TickCount;
-					//var a = Stopwatch.StartNew();
 					Update(context);
-
-					//a.Stop();
-					//Debug.WriteLine(a.ElapsedMilliseconds);
-
 				}
 				else
 				{
@@ -109,16 +103,24 @@ namespace BomberManUAWC.Hubs
 			}
 			if (_enemyStates.Count > 0)
 			{
-				foreach (var enemyState in _enemyStates)
+				for (int i = 0; i < _enemyStates.Count; i++)
 				{
-					var input = enemyState.Enemy.GetNextMove();
-					enemyState.Enemy.Update(input);
+					if (Map.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
+					{
+						_enemyStates.Remove(_enemyStates[i]);
+						Map.PointsToExplode.Clear();
+						continue;
+					}
+					var input = _enemyStates[i].Enemy.GetNextMove();
+					_enemyStates[i].Enemy.Update(input);
 				}
+		
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
-
 			}
+		
 		}
+
 
 		/// <summary>
 		/// Disconnect behavior 
@@ -129,6 +131,7 @@ namespace BomberManUAWC.Hubs
 		{
 			Clients.All.playerLeft(_currentPlayerState.Player);
 			_currentPlayerState = null;
+			Map = null;
 			return null;
 		}
 

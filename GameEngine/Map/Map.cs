@@ -1,4 +1,8 @@
-﻿namespace GameEngine.Map
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+
+namespace GameEngine.Map
 {
 	public class Map
 	{
@@ -6,6 +10,7 @@
 		public int TileSize { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
+		public List<Point> PointsToExplode = new List<Point>();
 		public Map(string map, int width, int height, int tileSize)
 		{
 			_map = Create(map);
@@ -24,6 +29,10 @@
 				_map[GetIndex(x, y)] = value;
 			}
 		}
+		public bool CheckExplosion(int x, int y)
+		{
+			return PointsToExplode.Count != 0 && PointsToExplode.Any(item => item.X == x && item.Y == y);
+		}
 		private Tile[] Create(string map)
 		{
 			var tiles = new Tile[map.Length];
@@ -37,5 +46,7 @@
 		{
 			return (y * Width) + x;
 		}
+
+
 	}
 }

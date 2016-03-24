@@ -8,7 +8,7 @@ namespace GameEngine.MapGenerator
 	public sealed class MapLoader
 	{
 		private static volatile Map.Map _instance;
-		private static readonly object SyncRoot = new Object();
+		private static readonly object SyncRoot = new object();
 		private static  string _generatedStringMap;
 
 		private static int[][] GenerateMap(int[][] ar)
@@ -20,10 +20,13 @@ namespace GameEngine.MapGenerator
 				{
 					if (i % 2 == 0 && j % 2 == 0)
 						ar[i][j] = (int)Tile.Wall;
+					//if ((ar[1][1] && ar[13][1] && ar[13][11] && ar[1][11]) != 0)
+					//{
+						
+					//}
 					else if (rand.Next(6) == 5)
 						ar[i][j] = (int)Tile.Brick;
 				}
-
 			}
 			return ar;
 		}
