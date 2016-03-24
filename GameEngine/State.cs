@@ -1,11 +1,8 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace GameEngine
 {
-	/// <summary>
-	/// State of 
-	/// </summary>
+
 	public abstract class State
 	{
 		public ConcurrentQueue<KeyboardState> Inputs { get; set; }

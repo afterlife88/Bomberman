@@ -111,7 +111,7 @@ namespace BomberManUAWC.Hubs
 						Map.PointsToExplode.Clear();
 						continue;
 					}
-					var input = _enemyStates[i].Enemy.GetNextMove();
+					var input = _enemyStates[i].Enemy.GetNextMove(_currentPlayerState);
 					_enemyStates[i].Enemy.Update(input);
 				}
 		
@@ -131,8 +131,8 @@ namespace BomberManUAWC.Hubs
 		{
 			Clients.All.playerLeft(_currentPlayerState.Player);
 			_currentPlayerState = null;
-			Map = null;
-			return null;
+
+			return base.OnDisconnected(stopCalled);
 		}
 
 		/// <summary>

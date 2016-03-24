@@ -9,6 +9,9 @@ using GameEngine.MapGenerator;
 
 namespace GameEngine
 {
+	/// <summary>
+	/// Base class for bomberman
+	/// </summary>
 	public class Bomberman
 	{
 		private static readonly Map.Map Map = MapLoader.GetMap;
@@ -29,7 +32,7 @@ namespace GameEngine
 		private int Bombs { get; set; }
 		public void Update(KeyboardState input)
 		{
-			
+
 			LastProcessed = input.Id;
 
 			int x = ExactX,
@@ -95,7 +98,6 @@ namespace GameEngine
 			}
 			new Bomb(X, this.Y, this);
 			Bombs++;
-
 		}
 
 		public void RemoveBomb()
