@@ -220,10 +220,10 @@
                 collisions = [],
                 possible = [];
 
-            window.Game.Logger.log('source=' + JSON.stringify(sourceRect));
-            window.Game.Logger.log('exactX=' + (this.exactX / POWER) + ', exactY=' + (this.exactY / POWER));
+
+
             window.Game.Logger.log('actualX=' + actualX + ', actualY=' + actualY);
-            window.Game.Logger.log('directionX=' + this.directionX + ', directionY=' + this.directionY);
+
 
             for (var i = 0; i < targets.length; ++i) {
                 var tx = targets[i].x,
@@ -337,7 +337,6 @@
                         effectiveDirectionY = candidate.directionY;
                     }
 
-                    window.Game.Logger.log('diffDir=(' + effectiveDirectionX + ', ' + effectiveDirectionY + ')');
 
                     if (window.Game.MoveSprites) {
                         this.setDirection(effectiveDirectionX, effectiveDirectionY);

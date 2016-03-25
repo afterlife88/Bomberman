@@ -108,13 +108,13 @@ namespace BomberManUAWC.Hubs
 					if (Map.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
 					{
 						_enemyStates.Remove(_enemyStates[i]);
-						Map.PointsToExplode.Clear();
 						continue;
 					}
 					var input = _enemyStates[i].Enemy.GetNextMove(_currentPlayerState);
 					_enemyStates[i].Enemy.Update(input);
 				}
-		
+				Map.PointsToExplode.Clear();
+
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
@@ -129,9 +129,11 @@ namespace BomberManUAWC.Hubs
 		/// <returns></returns>
 		public override Task OnDisconnected(bool stopCalled)
 		{
-			Clients.All.playerLeft(_currentPlayerState.Player);
+			//Clients.All.playerLeft(_currentPlayerState.Player);
 			_currentPlayerState = null;
-
+			MapLoader.GetMapData = null;
+			MapLoader.GetMap = null;
+			_enemyStates.Clear();
 			return base.OnDisconnected(stopCalled);
 		}
 

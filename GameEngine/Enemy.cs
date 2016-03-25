@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using GameEngine.Enums;
+using GameEngine.MapGenerator;
 
 namespace GameEngine
 {
@@ -38,52 +40,83 @@ namespace GameEngine
 					[Keys.RIGHT] = false,
 					[Keys.SPACE] = false
 				};
+
 				BombSet = false;
-				
-				if (num <= 25) //25%
+				//Go away from bomb
+				var bombs = Bomb.Bombs.ToArray();
+				foreach (var bomb in bombs)
 				{
-					dictionaryUp[Keys.LEFT] = true;
-
-					for (int i = 0; i < 12; i++)
+					var ourPosition = new Point(this.X, this.Y);
+					var dangetPoints = bomb.GetDangerPoints();
+					dangetPoints.Add(bomb.Location);
+					if (dangetPoints.Contains(ourPosition))
 					{
-						int randomNumber = _random.Next(0, 100);
-						var ks = new KeyboardState(dictionaryUp, randomNumber);
-						yield return ks;
+						if (ourPosition.X >= bomb.Location.X)
+						{
+							dictionaryUp[Keys.RIGHT] = true;
+							for (int i = 0; i < 12; i++)
+							{
+								int randomNumber = _random.Next(0, 100);
+								var ks = new KeyboardState(dictionaryUp, randomNumber);
+								yield return ks;
+							}
+						}
+						else
+						{
+							dictionaryUp[Keys.LEFT] = true;
+							for (int i = 0; i < 12; i++)
+							{
+								int randomNumber = _random.Next(0, 100);
+								var ks = new KeyboardState(dictionaryUp, randomNumber);
+								yield return ks;
+							}
+						}
+						if (ourPosition.Y >= bomb.Location.Y)
+						{
+							dictionaryUp[Keys.UP] = true;
+							for (int i = 0; i < 12; i++)
+							{
+								int randomNumber = _random.Next(0, 100);
+								var ks = new KeyboardState(dictionaryUp, randomNumber);
+								yield return ks;
+							}
+						}
+						else
+						{
+							dictionaryUp[Keys.DOWN] = true;
+							for (int i = 0; i < 12; i++)
+							{
+								int randomNumber = _random.Next(0, 100);
+								var ks = new KeyboardState(dictionaryUp, randomNumber);
+								yield return ks;
+							}
+						}
 					}
 				}
-				if (num > 25 && num <= 50)
-				{
-					dictionaryUp[Keys.UP] = true;
 
-					for (int i = 0; i < 12; i++)
-					{
-						int randomNumber = _random.Next(0, 100);
-						var ks = new KeyboardState(dictionaryUp, randomNumber);
-						yield return ks;
-					}
-				}
-				if (num > 50 && num <= 75)
-				{
-					dictionaryUp[Keys.RIGHT] = true;
-
-					for (int i = 0; i < 12; i++)
-					{
-						int randomNumber = _random.Next(0, 100);
-						var ks = new KeyboardState(dictionaryUp, randomNumber);
-						yield return ks;
-					}
-				}
+				//if (num <= 25) //25%
+				//{
+				//	dictionaryUp[Keys.LEFT] = true;
+				//}
+				//if (num > 25 && num <= 50)
+				//{
+				//	dictionaryUp[Keys.UP] = true;
+				//}
+				//if (num > 50 && num <= 75)
+				//{
+				//	dictionaryUp[Keys.RIGHT] = true;
+				//}
 				if (num > 75 && num <= 100)
 				{
-					dictionaryUp[Keys.DOWN] = true;
+					dictionaryUp[Keys.SPACE] = true;
+					BombSet = true;
+				}
 
-					for (int i = 0; i < 12; i++)
-					{
-						int randomNumber = _random.Next(0, 100);
-						var ks = new KeyboardState(dictionaryUp, randomNumber);
-						//BombSet = true;
-						yield return ks;
-					}
+				for (int i = 0; i < 12; i++)
+				{
+					int randomNumber = _random.Next(0, 100);
+					var ks = new KeyboardState(dictionaryUp, randomNumber);
+					yield return ks;
 				}
 			}
 		}

@@ -9,26 +9,37 @@ namespace GameEngine.MapGenerator
 	{
 		private static volatile Map.Map _instance;
 		private static readonly object SyncRoot = new object();
-		private static  string _generatedStringMap;
+		private static string _generatedStringMap;
 
 		private static int[][] GenerateMap(int[][] ar)
 		{
+			var tempAr = ar.Select(array => array.Select(e => e).ToArray()).ToArray();
 			Random rand = new Random();
-			for (int i = 1; i < ar.Length - 1; i++)
+			for (int i = 1; i < tempAr.Length - 1; i++)
 			{
-				for (int j = 1; j < ar[i].Length - 1; j++)
+				for (int j = 1; j < tempAr[i].Length - 1; j++)
 				{
 					if (i % 2 == 0 && j % 2 == 0)
-						ar[i][j] = (int)Tile.Wall;
-					//if ((ar[1][1] && ar[13][1] && ar[13][11] && ar[1][11]) != 0)
-					//{
-						
-					//}
+						tempAr[i][j] = (int)Tile.Wall;
+					
 					else if (rand.Next(6) == 5)
-						ar[i][j] = (int)Tile.Brick;
+					{
+						if ((i == 1 && (j == 1 || j == 2 || j == tempAr[i].Length - 2 || j == tempAr[i].Length - 3)) ||
+						    (i == 2 && (j == 1 || j == tempAr[i].Length - 2)) ||
+						    (i == tempAr.Length - 2 && (j == 1 || j == 2 || j == tempAr[i].Length - 2 || j == tempAr[i].Length - 3)) ||
+						    (i == tempAr.Length - 3 && (j == 1 || j == tempAr[i].Length - 2)))
+						{
+							tempAr[i][j] = (int) Tile.Grass;
+						}
+						else
+						{
+							tempAr[i][j] = (int)Tile.Brick;
+						}
+						
+					}
 				}
 			}
-			return ar;
+			return tempAr;
 		}
 
 		public static string GetMapData
@@ -37,10 +48,11 @@ namespace GameEngine.MapGenerator
 			{
 				if (_generatedStringMap == null)
 				{
-					_generatedStringMap = ArrToString(GenerateMap(ConstantValues.MapArray));;
+					_generatedStringMap = ArrToString(GenerateMap(ConstantValues.MapArray)); ;
 				}
-				return _generatedStringMap;;
+				return _generatedStringMap; ;
 			}
+			set { _generatedStringMap = value; }
 		}
 		public static Map.Map GetMap
 		{
@@ -54,9 +66,10 @@ namespace GameEngine.MapGenerator
 							_instance = new Map.Map(GetMapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
 					}
 				}
-
 				return _instance;
 			}
+			set { _instance = value; }
+			
 		}
 		private static string ArrToString(int[][] ar)
 		{
