@@ -49,6 +49,7 @@
     <Compile Include="Common\ConstantValues.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\Keys.cs" />
+    <Compile Include="Explosion.cs" />
     <Compile Include="Map\Tile.cs" />
     <Compile Include="KeyboardState.cs" />
     <Compile Include="Map\Map.cs" />

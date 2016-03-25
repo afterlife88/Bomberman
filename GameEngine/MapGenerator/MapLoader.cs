@@ -42,7 +42,7 @@ namespace GameEngine.MapGenerator
 			return tempAr;
 		}
 
-		public static string GetMapData
+		public static string MapData
 		{
 			get
 			{
@@ -54,7 +54,7 @@ namespace GameEngine.MapGenerator
 			}
 			set { _generatedStringMap = value; }
 		}
-		public static Map.Map GetMap
+		public static Map.Map MapInstance
 		{
 			get
 			{
@@ -63,7 +63,7 @@ namespace GameEngine.MapGenerator
 					lock (SyncRoot)
 					{
 						if (_instance == null)
-							_instance = new Map.Map(GetMapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
+							_instance = new Map.Map(MapData, ConstantValues.Width, ConstantValues.Height, ConstantValues.TileSize);
 					}
 				}
 				return _instance;

@@ -10,14 +10,18 @@ namespace GameEngine.Map
 		public int TileSize { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
-		public List<Point> PointsToExplode = new List<Point>();
+
 		public Map(string map, int width, int height, int tileSize)
 		{
 			_map = Create(map);
 			Width = width;
 			Height = height;
 			TileSize = tileSize;
+			PointsToExplode = new List<Point>(); 
 		}
+
+		public List<Point> PointsToExplode { get; set; }
+
 		public Tile this[int x, int y]
 		{
 			get

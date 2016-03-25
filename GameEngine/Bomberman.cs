@@ -14,7 +14,7 @@ namespace GameEngine
 	/// </summary>
 	public class Bomberman
 	{
-		private static readonly Map.Map Map = MapLoader.GetMap;
+		private static readonly Map.Map Map = MapLoader.MapInstance;
 		private static readonly Point[] EastTargets = { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
 		private static readonly Point[] WestTargets = { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
 		private static readonly Point[] NorthTargets = { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };
@@ -30,6 +30,7 @@ namespace GameEngine
 		public int LastProcessed { get; set; }
 		private int MaxBombs { get; set; } = 1;
 		private int Bombs { get; set; }
+		public List<Bomb> ListOfBombs = new List<Bomb>();
 		public void Update(KeyboardState input)
 		{
 
@@ -96,7 +97,9 @@ namespace GameEngine
 			{
 				return;
 			}
-			new Bomb(X, this.Y, this);
+			Bomb bomb = new Bomb(X, Y, this);
+			bomb.StartCountdown();
+			ListOfBombs.Add(bomb);
 			Bombs++;
 		}
 

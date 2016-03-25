@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
+using GameEngine.Common;
 using GameEngine.Map;
 using GameEngine.MapGenerator;
 
@@ -11,37 +12,37 @@ namespace GameEngine
 	{
 		private readonly int _x;
 		private readonly int _y;
-		private readonly Timer _aTimer = new Timer();
-		private readonly Bomberman _currentBomberman;
-		private readonly Map.Map _map = MapLoader.GetMap;
-		private static List<Bomb> listOfBombs = new List<Bomb>(); 
+		private readonly List<Point> _dangerPoints;
+		private Bomberman _caller;
+		/// <summary>
+		/// Время до детонации 
+		/// </summary>
+		private int _lifeTime = 3000;
+
+		/// <summary>
+		/// Таймер
+		/// </summary>
+		private Timer _timer;
+
 		private int _radius = 2;
-		private readonly int[][] _direction =
-		{
-			new[] {1, 0},
-			new[] {0, 1},
-			new[] {-1, 0},
-			new[] {0, -1}
-		};
+
 		public Bomb(int x, int y, Bomberman bomberman)
 		{
 			_x = x;
 			_y = y;
-			_currentBomberman = bomberman;
-			_aTimer.Elapsed += Explode;
-			_aTimer.Interval = 3000;
-			_aTimer.Enabled = true;
-			listOfBombs.Add(this);
+			_caller = bomberman;
+			_dangerPoints = GetDangerPoints();
+			_timer = new Timer(_lifeTime);
+			_timer.Elapsed += (parSender, parArgs) =>
+			{
+				Explode(_x, _y, _dangerPoints);
+			};
+			_timer.AutoReset = false;
 		}
-
-		public Point Location => new Point(_x,_y);
-
-		public static List<Bomb> Bombs => listOfBombs;
-
 		public List<Point> GetDangerPoints()
 		{
 			var dangerPoints = new List<Point>();
-			foreach (var dir in _direction)
+			foreach (var dir in ConstantValues.ExsplosionDirections)
 			{
 				for (var j = 1; j <= _radius; j++)
 				{
@@ -61,22 +62,25 @@ namespace GameEngine
 			}
 			return dangerPoints;
 		}
-
-		private void Explode(object source, ElapsedEventArgs e)
-		{
-			var dangerPoints = GetDangerPoints();
-			foreach (var dangerPoint in dangerPoints)
-			{
-				_map[dangerPoint.X, dangerPoint.Y] = Tile.Grass;
-				_map.PointsToExplode.Add(dangerPoint);
-			}
-			listOfBombs.Remove(this);
-			_currentBomberman.RemoveBomb();
-		}
 		private bool CanDestroy(int x, int y)
 		{
-			var tile = _map[x, y];
+			var tile = MapLoader.MapInstance[x, y];
 			return tile == Tile.Brick || tile == Tile.Grass;
 		}
+		public Point Location => new Point(_x, _y);
+		/// <summary>
+		/// Запустить обратный отсчет
+		/// </summary>
+		public void StartCountdown()
+		{
+			_timer.Start();
+		}
+		private void Explode(int x, int y, List<Point> dangerPoints)
+		{
+			_caller.ListOfBombs.Clear();
+			var explosion = new Explosion(dangerPoints);
+			explosion.InitTimer();
+		}
+	
 	}
 }

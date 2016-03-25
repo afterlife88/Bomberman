@@ -20,19 +20,16 @@ namespace BomberManUAWC.Hubs
 	{
 		private static PlayerState _currentPlayerState;
 		private static List<EnemyState> _enemyStates;
-		private Map Map = MapLoader.GetMap;
+		
 		private static int _gameLoopRunning;
-		private List<State> allActiveObjects = new List<State>();
+		//private List<State> allActiveObjects = new List<State>();
 
 		public override Task OnConnected()
 		{
 			_currentPlayerState = SetNewPlayerState();
 			_enemyStates = SetNewEnemyState();
-			allActiveObjects.Add(_currentPlayerState);
-			// add all enemys
-			allActiveObjects.AddRange(_enemyStates);
 			// Initialize player who connected with map
-			Clients.Caller.initializeMap(MapLoader.GetMapData).Wait();
+			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
@@ -105,7 +102,7 @@ namespace BomberManUAWC.Hubs
 			{
 				for (int i = 0; i < _enemyStates.Count; i++)
 				{
-					if (Map.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
+					if (MapLoader.MapInstance.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
 					{
 						_enemyStates.Remove(_enemyStates[i]);
 						continue;
@@ -113,12 +110,12 @@ namespace BomberManUAWC.Hubs
 					var input = _enemyStates[i].Enemy.GetNextMove(_currentPlayerState);
 					_enemyStates[i].Enemy.Update(input);
 				}
-				Map.PointsToExplode.Clear();
+				MapLoader.MapInstance.PointsToExplode.Clear();
 
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
-		
+
 		}
 
 
@@ -131,8 +128,8 @@ namespace BomberManUAWC.Hubs
 		{
 			//Clients.All.playerLeft(_currentPlayerState.Player);
 			_currentPlayerState = null;
-			MapLoader.GetMapData = null;
-			MapLoader.GetMap = null;
+			MapLoader.MapData = null;
+			MapLoader.MapInstance = null;
 			_enemyStates.Clear();
 			return base.OnDisconnected(stopCalled);
 		}

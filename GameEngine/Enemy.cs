@@ -8,7 +8,7 @@ namespace GameEngine
 {
 	public class Enemy : Bomberman
 	{
-		private static Random _random = new Random();
+		private readonly Random _random = new Random();
 		private readonly IEnumerator<KeyboardState> _behaviour;
 		private PlayerState _stateOfPlayer;
 		public bool BombSet { get; set; }
@@ -43,52 +43,55 @@ namespace GameEngine
 
 				BombSet = false;
 				//Go away from bomb
-				var bombs = Bomb.Bombs.ToArray();
-				foreach (var bomb in bombs)
+				if (ListOfBombs.Count > 0)
 				{
-					var ourPosition = new Point(this.X, this.Y);
-					var dangetPoints = bomb.GetDangerPoints();
-					dangetPoints.Add(bomb.Location);
-					if (dangetPoints.Contains(ourPosition))
+					var bombs = this.ListOfBombs.ToArray();
+					foreach (var bomb in bombs)
 					{
-						if (ourPosition.X >= bomb.Location.X)
+						var ourPosition = new Point(this.X, this.Y);
+						var dangetPoints = bomb.GetDangerPoints();
+						dangetPoints.Add(bomb.Location);
+						if (dangetPoints.Contains(ourPosition))
 						{
-							dictionaryUp[Keys.RIGHT] = true;
-							for (int i = 0; i < 12; i++)
+							if (ourPosition.X >= bomb.Location.X)
 							{
-								int randomNumber = _random.Next(0, 100);
-								var ks = new KeyboardState(dictionaryUp, randomNumber);
-								yield return ks;
+								dictionaryUp[Keys.RIGHT] = true;
+								for (int i = 0; i < 12; i++)
+								{
+									int randomNumber = _random.Next(0, 100);
+									var ks = new KeyboardState(dictionaryUp, randomNumber);
+									yield return ks;
+								}
 							}
-						}
-						else
-						{
-							dictionaryUp[Keys.LEFT] = true;
-							for (int i = 0; i < 12; i++)
+							else
 							{
-								int randomNumber = _random.Next(0, 100);
-								var ks = new KeyboardState(dictionaryUp, randomNumber);
-								yield return ks;
+								dictionaryUp[Keys.LEFT] = true;
+								for (int i = 0; i < 12; i++)
+								{
+									int randomNumber = _random.Next(0, 100);
+									var ks = new KeyboardState(dictionaryUp, randomNumber);
+									yield return ks;
+								}
 							}
-						}
-						if (ourPosition.Y >= bomb.Location.Y)
-						{
-							dictionaryUp[Keys.UP] = true;
-							for (int i = 0; i < 12; i++)
+							if (ourPosition.Y >= bomb.Location.Y)
 							{
-								int randomNumber = _random.Next(0, 100);
-								var ks = new KeyboardState(dictionaryUp, randomNumber);
-								yield return ks;
+								dictionaryUp[Keys.UP] = true;
+								for (int i = 0; i < 12; i++)
+								{
+									int randomNumber = _random.Next(0, 100);
+									var ks = new KeyboardState(dictionaryUp, randomNumber);
+									yield return ks;
+								}
 							}
-						}
-						else
-						{
-							dictionaryUp[Keys.DOWN] = true;
-							for (int i = 0; i < 12; i++)
+							else
 							{
-								int randomNumber = _random.Next(0, 100);
-								var ks = new KeyboardState(dictionaryUp, randomNumber);
-								yield return ks;
+								dictionaryUp[Keys.DOWN] = true;
+								for (int i = 0; i < 12; i++)
+								{
+									int randomNumber = _random.Next(0, 100);
+									var ks = new KeyboardState(dictionaryUp, randomNumber);
+									yield return ks;
+								}
 							}
 						}
 					}
@@ -111,13 +114,13 @@ namespace GameEngine
 					dictionaryUp[Keys.SPACE] = true;
 					BombSet = true;
 				}
-
 				for (int i = 0; i < 12; i++)
 				{
 					int randomNumber = _random.Next(0, 100);
 					var ks = new KeyboardState(dictionaryUp, randomNumber);
 					yield return ks;
 				}
+
 			}
 		}
 	}
