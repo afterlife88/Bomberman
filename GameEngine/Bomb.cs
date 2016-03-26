@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
 using GameEngine.Common;
@@ -42,7 +40,8 @@ namespace GameEngine
 			};
 			_timer.AutoReset = false;
 		}
-		public List<Point> GetDangerPoints()
+
+		private List<Point> GetDangerPoints()
 		{
 			var dangerPoints = new List<Point>();
 			foreach (var dir in ConstantValues.ExsplosionDirections)
@@ -65,6 +64,12 @@ namespace GameEngine
 			}
 			return dangerPoints;
 		}
+		/// <summary>
+		/// Check if bomb can destroy objects of map
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		private bool CanDestroy(int x, int y)
 		{
 			var tile = MapLoader.MapInstance[x, y];
@@ -72,7 +77,7 @@ namespace GameEngine
 		}
 		public Point Location => new Point(_x, _y);
 		/// <summary>
-		/// Запустить обратный отсчет
+		/// Run countdown of bomb 
 		/// </summary>
 		public void StartCountdown()
 		{
@@ -85,6 +90,5 @@ namespace GameEngine
 			var explosion = new Explosion(dangerPoints);
 			explosion.InitTimer();
 		}
-	
 	}
 }

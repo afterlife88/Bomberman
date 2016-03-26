@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace GameEngine.Map
 		public int TileSize { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
-
 		public Map(string mapData, int width, int height, int tileSize)
 		{
 			_map = Create(mapData);
@@ -23,7 +23,7 @@ namespace GameEngine.Map
 		}
 
 		public List<Point> PointsToExplode { get; set; }
-		public List<Bomb> ListOfBombs { get; set; } 
+		public List<Bomb> ListOfBombs { get; set; }
 
 		public Tile this[int x, int y]
 		{
@@ -47,7 +47,6 @@ namespace GameEngine.Map
 
 			}
 			return false;
-
 		}
 		private Tile[] Create(string map)
 		{

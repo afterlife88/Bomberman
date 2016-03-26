@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using GameEngine.Common;
@@ -29,8 +30,8 @@ namespace GameEngine
 		public int Index { get; set; }
 		public int LastProcessed { get; set; }
 		private int MaxBombs { get; set; } = 1;
-		private int Bombs { get; set; }
-
+		public int Bombs { get; set; }
+		public bool BombSet { get; set; }
 		public void Update(KeyboardState input)
 		{
 
@@ -80,7 +81,11 @@ namespace GameEngine
 			}
 			if (input[Keys.SPACE])
 			{
+				DirectionY = 0;
+				DirectionX = 0;
 				CreateBomb();
+				BombSet = true;
+				return;
 			}
 
 			SetDirection(DirectionX, DirectionY);
@@ -97,6 +102,7 @@ namespace GameEngine
 			{
 				return;
 			}
+
 			Bomb bomb = new Bomb(X, Y, this);
 			bomb.StartCountdown();
 			Bombs++;

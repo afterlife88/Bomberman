@@ -1,14 +1,13 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Timers;
-using GameEngine.Common;
 using GameEngine.Map;
 using GameEngine.MapGenerator;
 
 namespace GameEngine
 {
-	public class Explosion 
+	public class Explosion
 	{
 		private int _lifeTime = 1000;
 		private Timer _timer;
@@ -18,7 +17,7 @@ namespace GameEngine
 			_explosionPoints = explosionPoints;
 		}
 		/// <summary>
-		/// Запустить таймер, отсчитывающий время жизни взрыва
+		/// Timer to init explosion
 		/// </summary>
 		public void InitTimer()
 		{
@@ -30,16 +29,16 @@ namespace GameEngine
 			_timer.AutoReset = false;
 			_timer.Start();
 		}
-	
 		private void Explode()
 		{
+			Debug.WriteLine("BombExplode");
 			foreach (var dangerPoint in _explosionPoints)
 			{
 				MapLoader.MapInstance[dangerPoint.X, dangerPoint.Y] = Tile.Grass;
 				MapLoader.MapInstance.PointsToExplode.Add(dangerPoint);
 			}
-			
+
 		}
-		
+
 	}
 }

@@ -21,8 +21,9 @@ namespace BomberManUAWC.Hubs
 	{
 		private static PlayerState _currentPlayerState;
 		private static List<EnemyState> _enemyStates;
-
-		private static int _gameLoopRunning;
+		private bool _deadBot;
+		private int _idToRemove;
+		private int _gameLoopRunning;
 		//private List<State> allActiveObjects = new List<State>();
 
 		public override Task OnConnected()
@@ -34,9 +35,10 @@ namespace BomberManUAWC.Hubs
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
-			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
+			Clients.Caller.initialize(_enemyStates);
+
 			// Initialize bots
-			return Clients.Caller.initialize(_enemyStates);
+			return Clients.Caller.initializePlayer(_currentPlayerState.Player);
 		}
 
 		private void EnsureGameLoop()
@@ -84,12 +86,28 @@ namespace BomberManUAWC.Hubs
 			}
 		}
 
+		public override Task OnReconnected()
+		{
+			_currentPlayerState = SetNewPlayerState();
+			_enemyStates = SetNewEnemyState();
+			// Initialize player who connected with map
+			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
+			// Run loop in new thread
+			EnsureGameLoop();
+			// Initialize player client call
+			Clients.Caller.initialize(_enemyStates);
+
+			// Initialize bots
+			return Clients.Caller.initializePlayer(_currentPlayerState.Player);
+		}
+
 		/// <summary>
 		/// Persistance connection with client to update state of player on server
 		/// </summary>
 		/// <param name="context"></param>
 		private void Update(IHubContext context)
 		{
+			_deadBot = false;
 			if (_currentPlayerState != null)
 			{
 				KeyboardState input;
@@ -101,27 +119,26 @@ namespace BomberManUAWC.Hubs
 			}
 			if (_enemyStates.Count > 0)
 			{
-				for (int i = 0; i < _enemyStates.Count; i++)
+				foreach (var enemyState in _enemyStates)
 				{
-					if (MapLoader.MapInstance.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
+					if (MapLoader.MapInstance.CheckExplosion(enemyState.Enemy.X, enemyState.Enemy.Y))
 					{
-						_enemyStates.Remove(_enemyStates[i]);
-						Debug.WriteLine(_enemyStates.Count);
+						_deadBot = true;
+						_idToRemove = enemyState.Enemy.Index;
+						Debug.WriteLine("explosion {0}", MapLoader.MapInstance.PointsToExplode.Capacity);
 						continue;
 					}
-					var input = _enemyStates[i].Enemy.GetNextMove(_currentPlayerState);
-					_enemyStates[i].Enemy.Update(input);
-					
+					var input = enemyState.Enemy.GetNextMove();
+					enemyState.Enemy.Update(input);
 				}
-				MapLoader.MapInstance.PointsToExplode.Clear();
+				if (_deadBot)
+					_enemyStates.RemoveAll(r => r.Enemy.Index == _idToRemove);
 				// Update enemies on clientclient.updateEnemyStates
+				Debug.WriteLine(_enemyStates.Count);
+				MapLoader.MapInstance.PointsToExplode.Clear();
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
-			
-
 		}
-
-
 		/// <summary>
 		/// Disconnect behavior 
 		/// </summary>

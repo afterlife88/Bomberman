@@ -31,5 +31,7 @@
 			new[] {-1, 0},
 			new[] {0, -1}
 		};
+
+		public const int CountToMoveOnActualPosition = 13;
 	}
 }
