@@ -100,7 +100,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="GameEngineTest.cs" />
+    <Compile Include="GameEngineTests.cs" />
     <Compile Include="GameHubTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -18,23 +18,23 @@ namespace BomberManUAWC.Hubs
 	/// </summary>
 	public class GameHub : Hub
 	{
+		#region Variables
 		private static PlayerState _currentPlayerState;
 		private static IList<EnemyState> _enemyStates;
 		private static int _gameLoopRunning;
+		#endregion
 		public override Task OnConnected()
 		{
 			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
 
 			_currentPlayerState = SetNewPlayerState();
 			_enemyStates = SetNewEnemyState();
-
-
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
 			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
 			// Initialize bots
-			return Clients.Caller.initialize(_enemyStates);
+			return Clients.Caller.initializeEnemies(_enemyStates);
 		}
 
 		private void EnsureGameLoop()
@@ -116,21 +116,6 @@ namespace BomberManUAWC.Hubs
 		}
 
 		/// <summary>
-		/// Disconnect behavior 
-		/// </summary>
-		/// <param name="stopCalled"></param>
-		/// <returns></returns>
-		public override Task OnDisconnected(bool stopCalled)
-		{
-			Clients.All.playerLeft(_currentPlayerState.Player);
-			_currentPlayerState = null;
-			_enemyStates = null;
-			MapLoader.MapData = null;
-			MapLoader.MapInstance = null;
-			return null;
-		}
-
-		/// <summary>
 		/// Singleton new player state
 		/// </summary>
 		/// <returns></returns>
@@ -151,6 +136,20 @@ namespace BomberManUAWC.Hubs
 				return new PlayerState { Player = player, Inputs = new ConcurrentQueue<KeyboardState>() };
 			}
 			return _currentPlayerState;
+		}
+		/// <summary>
+		/// Disconnect behavior 
+		/// </summary>
+		/// <param name="stopCalled"></param>
+		/// <returns></returns>
+		public override Task OnDisconnected(bool stopCalled)
+		{
+			Clients.All.playerLeft(_currentPlayerState.Player);
+			_currentPlayerState = null;
+			_enemyStates = null;
+			MapLoader.MapData = null;
+			MapLoader.MapInstance = null;
+			return null;
 		}
 		/// <summary>
 		/// Init position of bots

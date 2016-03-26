@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace GameEngine.Map
 {
@@ -34,13 +33,20 @@ namespace GameEngine.Map
 		}
 		public bool CheckExplosion(int x, int y)
 		{
-			return PointsToExplode.ToArray().Any(item => x == item.X && item.Y == y);
-		}
+			foreach (var item in PointsToExplode.ToArray())
+			{
+				if (x == item.X && item.Y == y)
+				{
+					return true;
+				}
 
+			}
+			return false;
+		}
 		private Tile[] Create(string map)
 		{
 			var tiles = new Tile[map.Length];
-			for (var i = 0; i < map.Length; i++)
+			for (int i = 0; i < map.Length; i++)
 			{
 				tiles[i] = (Tile)(map[i] - '0');
 			}
@@ -50,5 +56,7 @@ namespace GameEngine.Map
 		{
 			return (y * Width) + x;
 		}
+
+
 	}
 }

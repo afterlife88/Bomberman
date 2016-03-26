@@ -1,13 +1,7 @@
 ﻿(function ($, window) {
 
     var requestAnimFrame = (function () {
-        // Easier for debugging can change the fps dynamically
-        //        return window.requestAnimationFrame ||
-        //     window.webkitRequestAnimationFrame ||
-        //     window.mozRequestAnimationFrame ||
-        //     window.oRequestAnimationFrame ||
-        //     window.msRequestAnimationFrame ||
-        return function (callback, element) {
+        return function (callback) {
             window.setTimeout(callback, 1000 / window.Game.TicksPerSecond);
         };
     })();
@@ -23,9 +17,8 @@
         var renderer = new window.Game.Renderer(assetManager);
 
         engine.initialize();
-        console.log(engine);
         animate(engine, renderer, canvas, context);
-
+      
         $(document).keydown(function (e) {
             if (engine.onKeydown(e)) {
                 e.preventDefault();
@@ -43,12 +36,15 @@
 
     function animate(engine, renderer, canvas, context) {
         window.Game.Logger.clear();
-        //window.Game.Logger.log('FPS = ' + window.Game.TicksPerSecond);
 
         engine.update();
-
+      
         context.clearRect(0, 0, canvas.width, canvas.height);
-
+        if (engine.sprites.length === 1) {
+            if (confirm('Game over! Want to play more? ')) {
+                window.location.reload();
+            }
+        }
         renderer.draw(engine, context);
 
         // request new frame

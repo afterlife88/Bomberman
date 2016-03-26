@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace BomberManUAWC.Tests
 {
 	[TestClass]
-	public class GameEngineTest
+	public class GameEngineTests
 	{
 		[TestMethod]
 		public void Get_MapString_Succesfull()
@@ -78,7 +78,7 @@ namespace BomberManUAWC.Tests
 			Assert.AreEqual(1, MapLoader.MapInstance.ListOfBombs.Count);
 		}
 		[TestMethod]
-		public void Check_Explosion_After_Bomb()
+		public void Check_Explosion_Vector_Kill_Unit_After_Bomb()
 		{
 			int bombsPlantedBefore = 0;
 			var player = new Player
@@ -91,11 +91,21 @@ namespace BomberManUAWC.Tests
 			};
 			var plantBombState = GetDownKeyboardState(Keys.SPACE);
 			player.Update(plantBombState);
-			Thread.Sleep(2000);
+			var rightState = GetDownKeyboardState(Keys.RIGHT);
+			player.Update(plantBombState);
+			for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
+			{
+				// Move right by X
+				player.Update(rightState);
+			}
+			// Wait explosion
+			Thread.Sleep(3100);
 			// Check count of bomb after explosion
 			Assert.AreEqual(bombsPlantedBefore, player.Bombs);
-			Trace.WriteLine(MapLoader.MapInstance.PointsToExplode.Count);
-			//Assert.IsNotNull(MapLoader.MapInstance.PointsToExplode);
+			// Check explosion points added to list
+			Assert.AreNotEqual(0, MapLoader.MapInstance.PointsToExplode.Count);
+			// Check explosion are in player position
+			Assert.IsTrue(MapLoader.MapInstance.CheckExplosion(player.X, player.Y));
 		}
 		private static KeyboardState GetDownKeyboardState(Keys key)
 		{

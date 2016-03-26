@@ -12,6 +12,7 @@ namespace GameEngine
 	/// </summary>
 	public class Bomb
 	{
+		#region Fields
 		private readonly int _x;
 		private readonly int _y;
 		private readonly List<Point> _dangerPoints;
@@ -28,6 +29,7 @@ namespace GameEngine
 		/// Radius of explosion
 		/// </summary>
 		private int _radius = 2;
+		#endregion
 		/// <summary>
 		/// Default constructor	
 		/// </summary>
@@ -46,6 +48,13 @@ namespace GameEngine
 				Explode(_dangerPoints);
 			};
 			_timer.AutoReset = false;
+		}
+		/// <summary>
+		/// Run countdown of bomb 
+		/// </summary>
+		public void StartCountdown()
+		{
+			_timer.Start();
 		}
 		/// <summary>
 		/// Get point that destroyed at explosion
@@ -86,13 +95,7 @@ namespace GameEngine
 			var tile = MapLoader.MapInstance[x, y];
 			return tile == Tile.Brick || tile == Tile.Grass;
 		}
-		/// <summary>
-		/// Run countdown of bomb 
-		/// </summary>
-		public void StartCountdown()
-		{
-			_timer.Start();
-		}
+	
 		/// <summary>
 		/// Make explosion
 		/// </summary>
@@ -102,8 +105,8 @@ namespace GameEngine
 			lock (MapLoader.MapInstance.PointsToExplode)
 			{
 				MapLoader.MapInstance.ListOfBombs.Clear();
-				_caller.RemoveBomb();
 				MapLoader.MapInstance.PointsToExplode.AddRange(dangerPoints);
+				_caller.RemoveBomb();
 				var explosion = new Explosion(dangerPoints);
 				explosion.InitTimer();
 			}

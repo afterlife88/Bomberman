@@ -30,22 +30,27 @@ namespace GameEngine
 				var num = _random.Next(100);
 				BombSet = false;
 
-				if (num <= 25) //25%
+				if (num <= 24)
 				{
 					state = GetDownKeyboardState(Keys.LEFT);
 				}
-				if (num > 25 && num <= 50)
+				if (num > 24 && num <= 48)
 				{
 					state = GetDownKeyboardState(Keys.UP);
 				}
-				if (num > 50 && num <= 75)
+				if (num > 48 && num <= 72)
 				{
 					state = GetDownKeyboardState(Keys.RIGHT);
 				}
-				if (num > 75 && num <= 100)
+				if (num > 72 && num <= 96)
 				{
 					state = GetDownKeyboardState(Keys.DOWN);
-					//BombSet = true;
+				
+				}
+				if (num > 96 && num <= 100)
+				{
+					state = GetDownKeyboardState(Keys.SPACE);
+					BombSet = true;
 				}
 				for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 				{

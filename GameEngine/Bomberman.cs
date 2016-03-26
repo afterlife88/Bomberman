@@ -91,7 +91,10 @@ namespace GameEngine
 
 			MoveExact(x, y);
 		}
-
+		public void RemoveBomb()
+		{
+			Bombs--;
+		}
 		private void CreateBomb()
 		{
 			BombSet = true;
@@ -109,10 +112,7 @@ namespace GameEngine
 			Bombs++;
 		}
 
-		public void RemoveBomb()
-		{
-			Bombs--;
-		}
+		
 		private void MoveExact(int x, int y)
 		{
 			float effectiveX = x / (ConstantValues.Power * 1f),

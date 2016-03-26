@@ -54,29 +54,6 @@
                             width = metadata.width * scale,
                             height = metadata.height * scale;
 
-
-                        // Bounding Box 
-                        /*if (window.Game.Debugging) {
-                            context.fillStyle = 'orange';
-                            context.fillRect(sprite.x * game.map.tileSize, sprite.y * game.map.tileSize, game.map.tileSize, game.map.tileSize);
-
-                            context.fillStyle = 'purple';
-                            context.fillRect(x * game.map.tileSize, y * game.map.tileSize, game.map.tileSize, game.map.tileSize);
-
-                            var targets = sprite.getHitTargets();
-                            context.fillStyle = 'red';
-                            for (var j = 0; j < targets.length; ++j) {
-                                var xx = sprite.x + targets[j].x,
-                                    yy = sprite.y + targets[j].y;
-                                context.fillRect(xx * game.map.tileSize, yy * game.map.tileSize, game.map.tileSize, game.map.tileSize);
-                            }
-
-                            if (sprite.candidate) {
-                                context.fillStyle = 'yellow';
-                                context.fillRect(sprite.candidate.x * game.map.tileSize, sprite.candidate.y * game.map.tileSize, game.map.tileSize, game.map.tileSize);
-                            }
-                        }*/
-
                         if (sprite.transparent) {
                             context.globalAlpha = 0.5;
                         }

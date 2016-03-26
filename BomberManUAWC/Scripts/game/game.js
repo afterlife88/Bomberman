@@ -60,7 +60,6 @@
     window.Game.Engine.prototype = {
         // methods
         onKeydown: function (e) {
-            //console.log(e.keyCode);
             keyState[e.keyCode] = true;
         },
         onKeyup: function (e) {
@@ -113,6 +112,7 @@
             }
         },
         sendKeyState: function () {
+           
             var player = this.players[0];
 
             if (!(empty(prevKeyState) && empty(keyState))) {
@@ -141,7 +141,6 @@
             var that = this, game = $.connection.gameHub;
 
             game.client.initializeMap = function (data) {
-                console.log(data);
                 that.map.fill(data);
             };
 
@@ -161,18 +160,16 @@
                 }
             };
 
-            game.client.initialize = function (enemies) {
+            game.client.initializeEnemies = function (enemies) {
                 for (var i = 0; i < enemies.length; ++i) {
                     var enemy = enemies[i].Enemy;
 
                     var bomber = new window.Game.Bomber(false);
-                    console.log(enemy.Index);
                     that.players[enemy.Index] = bomber;
                     bomber.moveTo(enemy.X, enemy.Y);
                     that.addSprite(bomber);
 
                 }
-                console.log(that.players);
             };
 
             game.client.updatePlayerState = function (player) {
@@ -219,8 +216,6 @@
             for (var key in keyState) {
                 prevKeyState[key] = keyState[key];
             }
-
-            window.Game.Logger.log('last input = ' + (inputId - 1));
             window.Game.Logger.log('last sent input = ' + lastSentInputId);
             window.Game.Logger.log('last server processed input = ' + lastProcessed);
         },
@@ -229,7 +224,7 @@
                 if (this.map.get(x, y) === this.types.GRASS) {
                     for (var i = 0; i < this.sprites.length; ++i) {
                         var sprite = this.sprites[i];
-                        if (sprite.x === x && sprite.y === y && sprite.type === window.Game.Sprites.BOMB) {
+                        if (sprite.x === x && sprite.y === y) {
                             return false;
                         }
                     }
