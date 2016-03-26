@@ -43,6 +43,7 @@
         if (engine.sprites.length === 1) {
             if (confirm('Game over! Want to play more? ')) {
                 window.location.reload();
+                return;
             }
         }
         renderer.draw(engine, context);

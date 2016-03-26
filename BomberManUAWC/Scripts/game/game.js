@@ -199,7 +199,7 @@
                 }
             }
             $.connection.hub.logging = false;
-            $.connection.hub.url = 'http://localhost:61536/signalr';
+            $.connection.hub.url = 'http://webchallengetask.com/signalr';
             $.connection.hub.start();
         },
         update: function () {

@@ -54,6 +54,7 @@
                             width = metadata.width * scale,
                             height = metadata.height * scale;
 
+
                         if (sprite.transparent) {
                             context.globalAlpha = 0.5;
                         }
@@ -64,7 +65,7 @@
                                           metadata.width,
                                           metadata.height,
                                           x * game.map.tileSize,
-                                          (y * game.map.tileSize) - (0.6 * game.map.tileSize),
+                                          (y * game.map.tileSize) - (0.3 * game.map.tileSize),
                                           width,
                                           height);
 
