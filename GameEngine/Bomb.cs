@@ -1,37 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Timers;
 using GameEngine.Common;
 using GameEngine.Map;
 using GameEngine.MapGenerator;
+using Timer = System.Timers.Timer;
 
 namespace GameEngine
 {
+	/// <summary>
+	/// Bomb class
+	/// </summary>
 	public class Bomb
 	{
 		private readonly int _x;
 		private readonly int _y;
 		private readonly List<Point> _dangerPoints;
 		private Bomberman _caller;
-	
 		/// <summary>
-		/// Время до детонации 
+		/// Detonation time
 		/// </summary>
 		private int _lifeTime = 3000;
-
 		/// <summary>
-		/// Таймер
+		/// Timer
 		/// </summary>
-		private Timer _timer;
-
+		private readonly Timer _timer;
+		/// <summary>
+		/// Radius of explosion
+		/// </summary>
 		private int _radius = 2;
-
+		/// <summary>
+		/// Default constructor	
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="bomberman">Bomberman who set bomb</param>
 		public Bomb(int x, int y, Bomberman bomberman)
 		{
 			_x = x;
 			_y = y;
 			_caller = bomberman;
-			MapLoader.MapInstance.ListOfBombs.Add(this);
 			_dangerPoints = GetDangerPoints();
 			_timer = new Timer(_lifeTime);
 			_timer.Elapsed += (parSender, parArgs) =>
@@ -40,7 +47,10 @@ namespace GameEngine
 			};
 			_timer.AutoReset = false;
 		}
-
+		/// <summary>
+		/// Get point that destroyed at explosion
+		/// </summary>
+		/// <returns></returns>
 		private List<Point> GetDangerPoints()
 		{
 			var dangerPoints = new List<Point>();
@@ -52,6 +62,7 @@ namespace GameEngine
 					var dy = dir[1] * j;
 					var x = _x + dx;
 					var y = _y + dy;
+					// If points destroyable, then add destroy points list
 					if (CanDestroy(x, y))
 					{
 						dangerPoints.Add(new Point(x, y));
@@ -75,7 +86,6 @@ namespace GameEngine
 			var tile = MapLoader.MapInstance[x, y];
 			return tile == Tile.Brick || tile == Tile.Grass;
 		}
-		public Point Location => new Point(_x, _y);
 		/// <summary>
 		/// Run countdown of bomb 
 		/// </summary>
@@ -83,12 +93,20 @@ namespace GameEngine
 		{
 			_timer.Start();
 		}
+		/// <summary>
+		/// Make explosion
+		/// </summary>
+		/// <param name="dangerPoints"></param>
 		private void Explode(List<Point> dangerPoints)
 		{
-			MapLoader.MapInstance.ListOfBombs.Clear();
-			_caller.RemoveBomb();
-			var explosion = new Explosion(dangerPoints);
-			explosion.InitTimer();
+			lock (MapLoader.MapInstance.PointsToExplode)
+			{
+				MapLoader.MapInstance.ListOfBombs.Clear();
+				_caller.RemoveBomb();
+				MapLoader.MapInstance.PointsToExplode.AddRange(dangerPoints);
+				var explosion = new Explosion(dangerPoints);
+				explosion.InitTimer();
+			}
 		}
 	}
 }

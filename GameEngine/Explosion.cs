@@ -31,13 +31,15 @@ namespace GameEngine
 		}
 		private void Explode()
 		{
-			Debug.WriteLine("BombExplode");
-			foreach (var dangerPoint in _explosionPoints)
+			lock (MapLoader.MapInstance.PointsToExplode)
 			{
-				MapLoader.MapInstance[dangerPoint.X, dangerPoint.Y] = Tile.Grass;
-				MapLoader.MapInstance.PointsToExplode.Add(dangerPoint);
+				Debug.WriteLine("BombExplode");
+				foreach (var dangerPoint in _explosionPoints)
+				{
+					MapLoader.MapInstance[dangerPoint.X, dangerPoint.Y] = Tile.Grass;
+					MapLoader.MapInstance.PointsToExplode.Remove(dangerPoint);
+				}
 			}
-
 		}
 
 	}

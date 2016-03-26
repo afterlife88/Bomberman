@@ -45,6 +45,7 @@ namespace GameEngine
 				if (num > 75 && num <= 100)
 				{
 					state = GetDownKeyboardState(Keys.DOWN);
+					//BombSet = true;
 				}
 				for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 				{

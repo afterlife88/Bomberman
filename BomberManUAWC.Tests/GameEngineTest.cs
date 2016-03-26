@@ -91,7 +91,7 @@ namespace BomberManUAWC.Tests
 			};
 			var plantBombState = GetDownKeyboardState(Keys.SPACE);
 			player.Update(plantBombState);
-			Thread.Sleep(4000);
+			Thread.Sleep(2000);
 			// Check count of bomb after explosion
 			Assert.AreEqual(bombsPlantedBefore, player.Bombs);
 			Trace.WriteLine(MapLoader.MapInstance.PointsToExplode.Count);

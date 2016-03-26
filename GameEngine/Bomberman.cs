@@ -80,11 +80,8 @@ namespace GameEngine
 			}
 			if (input[Keys.SPACE])
 			{
-				DirectionY = 0;
-				DirectionX = 0;
 				CreateBomb();
-				BombSet = true;
-				return;
+				
 			}
 
 			SetDirection(DirectionX, DirectionY);
@@ -97,12 +94,17 @@ namespace GameEngine
 
 		private void CreateBomb()
 		{
+			BombSet = true;
 			if (this.Bombs >= this.MaxBombs)
 			{
 				return;
 			}
 
 			Bomb bomb = new Bomb(X, Y, this);
+			lock (MapLoader.MapInstance.ListOfBombs)
+			{
+				MapLoader.MapInstance.ListOfBombs.Add(bomb);
+			}
 			bomb.StartCountdown();
 			Bombs++;
 		}

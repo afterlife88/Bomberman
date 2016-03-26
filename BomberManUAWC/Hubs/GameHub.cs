@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameEngine;
@@ -13,16 +14,13 @@ using Microsoft.AspNet.SignalR;
 namespace BomberManUAWC.Hubs
 {
 	/// <summary>
-	/// Main hub to manage client movement
+	/// Main hub to manage client movements
 	/// </summary>
 	public class GameHub : Hub
 	{
 		private static PlayerState _currentPlayerState;
-		private static ICollection<EnemyState> _enemyStates;
-
+		private static IList<EnemyState> _enemyStates;
 		private static int _gameLoopRunning;
-		
-
 		public override Task OnConnected()
 		{
 			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
@@ -30,7 +28,7 @@ namespace BomberManUAWC.Hubs
 			_currentPlayerState = SetNewPlayerState();
 			_enemyStates = SetNewEnemyState();
 
-			
+
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
@@ -71,7 +69,7 @@ namespace BomberManUAWC.Hubs
 
 			while (true)
 			{
-				int delta = (lastUpdate + frameTicks) - Environment.TickCount;
+				var delta = (lastUpdate + frameTicks) - Environment.TickCount;
 				if (delta < 0)
 				{
 					lastUpdate = Environment.TickCount;
@@ -100,16 +98,20 @@ namespace BomberManUAWC.Hubs
 					context.Clients.All.updatePlayerState(_currentPlayerState.Player);
 				}
 			}
-			if (_enemyStates != null)
+			if (_enemyStates != null && _enemyStates.Count > 0)
 			{
-				foreach (var enemyState in _enemyStates)
+				foreach (var enemyState in _enemyStates.ToArray())
 				{
+					if (MapLoader.MapInstance.CheckExplosion(enemyState.Enemy.X, enemyState.Enemy.Y))
+					{
+						_enemyStates.Remove(enemyState);
+						continue;
+					}
 					var input = enemyState.Enemy.GetNextMove();
 					enemyState.Enemy.Update(input);
 				}
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
-
 			}
 		}
 

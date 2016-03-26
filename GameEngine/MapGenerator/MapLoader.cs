@@ -5,12 +5,14 @@ using GameEngine.Map;
 
 namespace GameEngine.MapGenerator
 {
-	public sealed class MapLoader
+	/// <summary>
+	/// Class to manage map
+	/// </summary>
+	public static class MapLoader
 	{
 		private static volatile Map.Map _instance;
 		private static readonly object SyncRoot = new object();
 		private static string _generatedStringMap;
-
 		private static int[][] GenerateMap(int[][] ar)
 		{
 			var tempAr = ar.Select(array => array.Select(e => e).ToArray()).ToArray();
@@ -21,10 +23,10 @@ namespace GameEngine.MapGenerator
 				{
 					if (i % 2 == 0 && j % 2 == 0)
 						tempAr[i][j] = (int)Tile.Wall;
-					
-					else if (rand.Next(3) == 2)
+					// make bricks on 25 % of map
+					else if (rand.Next(4) == 3)
 					{
-						
+						// ingore first points by x and y with bomberman
 						if ((i == 1 && (j == 1 || j == 2 || j == tempAr[i].Length - 2 || j == tempAr[i].Length - 3)) ||
 						    (i == 2 && (j == 1 || j == tempAr[i].Length - 2)) ||
 						    (i == tempAr.Length - 2 && (j == 1 || j == 2 || j == tempAr[i].Length - 2 || j == tempAr[i].Length - 3)) ||
@@ -72,6 +74,11 @@ namespace GameEngine.MapGenerator
 			set { _instance = value; }
 			
 		}
+		/// <summary>
+		/// Convert string map
+		/// </summary>
+		/// <param name="ar"></param>
+		/// <returns></returns>
 		private static string ArrToString(int[][] ar)
 		{
 			return string.Join("", ar.Select(arr => string.Join("", arr)));
