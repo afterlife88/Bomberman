@@ -15,7 +15,6 @@ namespace GameEngine
 	/// </summary>
 	public class Bomberman
 	{
-		private static readonly Map.Map Map = MapLoader.MapInstance;
 		private static readonly Point[] EastTargets = { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
 		private static readonly Point[] WestTargets = { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
 		private static readonly Point[] NorthTargets = { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };
@@ -120,9 +119,9 @@ namespace GameEngine
 			var actualX = (int)Math.Floor((float)(x + (ConstantValues.Power / 2)) / ConstantValues.Power);
 			var actualY = (int)Math.Floor((float)(y + (ConstantValues.Power / 2)) / ConstantValues.Power);
 			var targets = GetHitTargets();
-			var sourceLeft = effectiveX * Map.TileSize;
-			var sourceTop = effectiveY * Map.TileSize;
-			var sourceRect = new RectangleF(sourceLeft, sourceTop, Map.TileSize, Map.TileSize);
+			var sourceLeft = effectiveX * MapLoader.MapInstance.TileSize;
+			var sourceTop = effectiveY * MapLoader.MapInstance.TileSize;
+			var sourceRect = new RectangleF(sourceLeft, sourceTop, MapLoader.MapInstance.TileSize, MapLoader.MapInstance.TileSize);
 			var collisions = new List<Point>();
 			var possible = new List<Point>();
 
@@ -131,7 +130,7 @@ namespace GameEngine
 				int targetX = actualX + t.X,
 					targetY = actualY + t.Y;
 
-				var targetRect = new RectangleF(targetX * Map.TileSize, targetY * Map.TileSize, Map.TileSize, Map.TileSize);
+				var targetRect = new RectangleF(targetX * MapLoader.MapInstance.TileSize, targetY * MapLoader.MapInstance.TileSize, MapLoader.MapInstance.TileSize, MapLoader.MapInstance.TileSize);
 				var movable = Movable(targetX, targetY);
 				var intersects = sourceRect.IntersectsWith(targetRect);
 
@@ -265,9 +264,9 @@ namespace GameEngine
 		}
 		private bool Movable(int x, int y)
 		{
-			if (y >= 0 && y < Map.Height && x >= 0 && x < Map.Width)
+			if (y >= 0 && y < MapLoader.MapInstance.Height && x >= 0 && x < MapLoader.MapInstance.Width)
 			{
-				if (Map[x, y] == Tile.Grass)
+				if (MapLoader.MapInstance[x, y] == Tile.Grass)
 				{
 					return true;
 				}

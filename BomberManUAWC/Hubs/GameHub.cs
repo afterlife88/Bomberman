@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using GameEngine;
 using GameEngine.Common;
 using GameEngine.Enums;
-using GameEngine.Map;
 using GameEngine.MapGenerator;
 using Microsoft.AspNet.SignalR;
 
@@ -20,25 +18,25 @@ namespace BomberManUAWC.Hubs
 	public class GameHub : Hub
 	{
 		private static PlayerState _currentPlayerState;
-		private static List<EnemyState> _enemyStates;
-		private bool _deadBot;
-		private int _idToRemove;
-		private int _gameLoopRunning;
-		//private List<State> allActiveObjects = new List<State>();
+		private static ICollection<EnemyState> _enemyStates;
+
+		private static int _gameLoopRunning;
+		
 
 		public override Task OnConnected()
 		{
+			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
+
 			_currentPlayerState = SetNewPlayerState();
 			_enemyStates = SetNewEnemyState();
-			// Initialize player who connected with map
-			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
+
+			
 			// Run loop in new thread
 			EnsureGameLoop();
 			// Initialize player client call
-			Clients.Caller.initialize(_enemyStates);
-
+			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
 			// Initialize bots
-			return Clients.Caller.initializePlayer(_currentPlayerState.Player);
+			return Clients.Caller.initialize(_enemyStates);
 		}
 
 		private void EnsureGameLoop()
@@ -73,10 +71,11 @@ namespace BomberManUAWC.Hubs
 
 			while (true)
 			{
-				var delta = (lastUpdate + frameTicks) - Environment.TickCount;
+				int delta = (lastUpdate + frameTicks) - Environment.TickCount;
 				if (delta < 0)
 				{
 					lastUpdate = Environment.TickCount;
+
 					Update(context);
 				}
 				else
@@ -86,28 +85,12 @@ namespace BomberManUAWC.Hubs
 			}
 		}
 
-		public override Task OnReconnected()
-		{
-			_currentPlayerState = SetNewPlayerState();
-			_enemyStates = SetNewEnemyState();
-			// Initialize player who connected with map
-			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
-			// Run loop in new thread
-			EnsureGameLoop();
-			// Initialize player client call
-			Clients.Caller.initialize(_enemyStates);
-
-			// Initialize bots
-			return Clients.Caller.initializePlayer(_currentPlayerState.Player);
-		}
-
 		/// <summary>
 		/// Persistance connection with client to update state of player on server
 		/// </summary>
 		/// <param name="context"></param>
 		private void Update(IHubContext context)
 		{
-			_deadBot = false;
 			if (_currentPlayerState != null)
 			{
 				KeyboardState input;
@@ -117,28 +100,19 @@ namespace BomberManUAWC.Hubs
 					context.Clients.All.updatePlayerState(_currentPlayerState.Player);
 				}
 			}
-			if (_enemyStates.Count > 0)
+			if (_enemyStates != null)
 			{
 				foreach (var enemyState in _enemyStates)
 				{
-					if (MapLoader.MapInstance.CheckExplosion(enemyState.Enemy.X, enemyState.Enemy.Y))
-					{
-						_deadBot = true;
-						_idToRemove = enemyState.Enemy.Index;
-						Debug.WriteLine("explosion {0}", MapLoader.MapInstance.PointsToExplode.Capacity);
-						continue;
-					}
 					var input = enemyState.Enemy.GetNextMove();
 					enemyState.Enemy.Update(input);
 				}
-				if (_deadBot)
-					_enemyStates.RemoveAll(r => r.Enemy.Index == _idToRemove);
 				// Update enemies on clientclient.updateEnemyStates
-				Debug.WriteLine(_enemyStates.Count);
-				MapLoader.MapInstance.PointsToExplode.Clear();
 				context.Clients.All.updateEnemyStates(_enemyStates);
+
 			}
 		}
+
 		/// <summary>
 		/// Disconnect behavior 
 		/// </summary>
@@ -146,12 +120,12 @@ namespace BomberManUAWC.Hubs
 		/// <returns></returns>
 		public override Task OnDisconnected(bool stopCalled)
 		{
-			//Clients.All.playerLeft(_currentPlayerState.Player);
+			Clients.All.playerLeft(_currentPlayerState.Player);
 			_currentPlayerState = null;
+			_enemyStates = null;
 			MapLoader.MapData = null;
 			MapLoader.MapInstance = null;
-			_enemyStates.Clear();
-			return base.OnDisconnected(stopCalled);
+			return null;
 		}
 
 		/// <summary>

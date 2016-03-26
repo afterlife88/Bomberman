@@ -129,6 +129,7 @@
                     var buffer = inputs.splice(0, inputs.length);
                     if (buffer.length > 0 && player.hasMoved) {
                         player.hasMoved = false;
+                        player.placedBomb = false;
                         // send state to server
                         game.server.sendKeys(buffer);
                         lastSentInputId = buffer[buffer.length - 1].id;
