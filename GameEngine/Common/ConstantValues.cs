@@ -6,9 +6,9 @@
 		public const int Delta = 10;
 		public const int Fps = 60;
 
-		public static readonly int Width = 15;
-		public static readonly int Height = 13;
-		public static readonly int TileSize = 40;
+		public const int Width = 15;
+		public const int Height = 13;
+		public const int TileSize = 40;
 
 		public static readonly int[][] MapArray = {
 				new[] {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace BomberManUAWC.Hubs
 	{
 		private static PlayerState _currentPlayerState;
 		private static List<EnemyState> _enemyStates;
-		
+
 		private static int _gameLoopRunning;
 		//private List<State> allActiveObjects = new List<State>();
 
@@ -105,16 +106,18 @@ namespace BomberManUAWC.Hubs
 					if (MapLoader.MapInstance.CheckExplosion(_enemyStates[i].Enemy.X, _enemyStates[i].Enemy.Y))
 					{
 						_enemyStates.Remove(_enemyStates[i]);
+						Debug.WriteLine(_enemyStates.Count);
 						continue;
 					}
 					var input = _enemyStates[i].Enemy.GetNextMove(_currentPlayerState);
 					_enemyStates[i].Enemy.Update(input);
+					
 				}
 				MapLoader.MapInstance.PointsToExplode.Clear();
-
 				// Update enemies on clientclient.updateEnemyStates
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
+			
 
 		}
 

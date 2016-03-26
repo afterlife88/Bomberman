@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
 using GameEngine.Common;
@@ -11,7 +12,6 @@ namespace GameEngine
 	{
 		private int _lifeTime = 1000;
 		private Timer _timer;
-		private int _radius = 2;
 		private readonly List<Point> _explosionPoints;
 		public Explosion(List<Point> explosionPoints)
 		{
@@ -36,9 +36,9 @@ namespace GameEngine
 			foreach (var dangerPoint in _explosionPoints)
 			{
 				MapLoader.MapInstance[dangerPoint.X, dangerPoint.Y] = Tile.Grass;
-				
+				MapLoader.MapInstance.PointsToExplode.Add(dangerPoint);
 			}
-			MapLoader.MapInstance.PointsToExplode = _explosionPoints;
+			
 		}
 		
 	}

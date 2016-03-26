@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Timers;
@@ -14,6 +15,7 @@ namespace GameEngine
 		private readonly int _y;
 		private readonly List<Point> _dangerPoints;
 		private Bomberman _caller;
+	
 		/// <summary>
 		/// Время до детонации 
 		/// </summary>
@@ -31,11 +33,12 @@ namespace GameEngine
 			_x = x;
 			_y = y;
 			_caller = bomberman;
+			MapLoader.MapInstance.ListOfBombs.Add(this);
 			_dangerPoints = GetDangerPoints();
 			_timer = new Timer(_lifeTime);
 			_timer.Elapsed += (parSender, parArgs) =>
 			{
-				Explode(_x, _y, _dangerPoints);
+				Explode(_dangerPoints);
 			};
 			_timer.AutoReset = false;
 		}
@@ -75,9 +78,10 @@ namespace GameEngine
 		{
 			_timer.Start();
 		}
-		private void Explode(int x, int y, List<Point> dangerPoints)
+		private void Explode(List<Point> dangerPoints)
 		{
-			_caller.ListOfBombs.Clear();
+			MapLoader.MapInstance.ListOfBombs.Clear();
+			_caller.RemoveBomb();
 			var explosion = new Explosion(dangerPoints);
 			explosion.InitTimer();
 		}

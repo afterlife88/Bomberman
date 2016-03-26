@@ -30,7 +30,7 @@ namespace GameEngine
 		public int LastProcessed { get; set; }
 		private int MaxBombs { get; set; } = 1;
 		private int Bombs { get; set; }
-		public List<Bomb> ListOfBombs = new List<Bomb>();
+
 		public void Update(KeyboardState input)
 		{
 
@@ -99,7 +99,6 @@ namespace GameEngine
 			}
 			Bomb bomb = new Bomb(X, Y, this);
 			bomb.StartCountdown();
-			ListOfBombs.Add(bomb);
 			Bombs++;
 		}
 
