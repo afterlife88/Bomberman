@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using GameEngine.GameObjects;
 
 namespace GameEngine.Map
 {
@@ -9,7 +10,13 @@ namespace GameEngine.Map
 		public int TileSize { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
+		/// <summary>
+		/// Expected exploding points
+		/// </summary>
 		public List<Point> PointsToExplode { get; }
+		/// <summary>
+		/// List of current bomb on the map
+		/// </summary>
 		public List<Bomb> ListOfBombs { get; }
 		public Map(string mapData, int width, int height, int tileSize)
 		{
@@ -31,6 +38,12 @@ namespace GameEngine.Map
 				_map[GetIndex(x, y)] = value;
 			}
 		}
+		/// <summary>
+		/// Check if player is on explosion in current tick
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
 		public bool CheckExplosion(int x, int y)
 		{
 			foreach (var item in PointsToExplode.ToArray())
@@ -56,7 +69,5 @@ namespace GameEngine.Map
 		{
 			return (y * Width) + x;
 		}
-
-
 	}
 }

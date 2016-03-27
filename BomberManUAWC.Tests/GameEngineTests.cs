@@ -6,8 +6,9 @@ using System.Threading;
 using GameEngine;
 using GameEngine.Common;
 using GameEngine.Enums;
+using GameEngine.GameObjects;
+using GameEngine.GameStates;
 using GameEngine.Map;
-using GameEngine.MapGenerator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BomberManUAWC.Tests

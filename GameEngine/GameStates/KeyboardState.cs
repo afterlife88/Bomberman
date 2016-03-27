@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using GameEngine.Enums;
 
-namespace GameEngine
+namespace GameEngine.GameStates
 {
 	/// <summary>
 	/// State of player
@@ -12,7 +10,6 @@ namespace GameEngine
 	{
 		private readonly Dictionary<Keys, bool> _keyState;
 		public int Id { get; }
-
 		public KeyboardState(Dictionary<Keys, bool> keyState, int id)
 		{
 			_keyState = keyState;

@@ -199,7 +199,7 @@
                 }
             }
             $.connection.hub.logging = false;
-            $.connection.hub.url = 'http://webchallengetask.com/signalr';
+            $.connection.hub.url = 'http://localhost:61536/signalr';
             $.connection.hub.start();
         },
         update: function () {
@@ -218,6 +218,7 @@
             }
             window.Game.Logger.log('last sent input = ' + lastSentInputId);
             window.Game.Logger.log('last server processed input = ' + lastProcessed);
+          
         },
         movable: function (x, y) {
             if (y >= 0 && y < MAP_HEIGHT && x >= 0 && x < MAP_WIDTH) {

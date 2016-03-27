@@ -9,6 +9,7 @@
 		public const int Width = 15;
 		public const int Height = 13;
 		public const int TileSize = 40;
+		public const int CountToMoveOnActualPosition = 13;
 
 		public static readonly int[][] MapArray = {
 				new[] {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
@@ -32,6 +33,6 @@
 			new[] {0, -1}
 		};
 
-		public const int CountToMoveOnActualPosition = 13;
+		
 	}
 }

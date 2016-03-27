@@ -2,10 +2,9 @@
 using System.Drawing;
 using GameEngine.Common;
 using GameEngine.Map;
-using GameEngine.MapGenerator;
 using Timer = System.Timers.Timer;
 
-namespace GameEngine
+namespace GameEngine.GameObjects
 {
 	/// <summary>
 	/// Bomb class

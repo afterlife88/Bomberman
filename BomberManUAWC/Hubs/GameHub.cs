@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using GameEngine;
 using GameEngine.Common;
 using GameEngine.Enums;
-using GameEngine.MapGenerator;
+using GameEngine.GameObjects;
+using GameEngine.GameStates;
+using GameEngine.Map;
 using Microsoft.AspNet.SignalR;
 
 namespace BomberManUAWC.Hubs
@@ -25,11 +27,12 @@ namespace BomberManUAWC.Hubs
 		#endregion
 		public override Task OnConnected()
 		{
+			// Init caller with map
 			Clients.Caller.initializeMap(MapLoader.MapData).Wait();
 
 			_currentPlayerState = SetNewPlayerState();
 			_enemyStates = SetNewEnemyState();
-			// Run loop in new thread
+			// Run loop 
 			EnsureGameLoop();
 			// Initialize player client call
 			Clients.Caller.initializePlayer(_currentPlayerState.Player).Wait();
@@ -114,7 +117,20 @@ namespace BomberManUAWC.Hubs
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
 		}
-
+		/// <summary>
+		/// Disconnect behavior 
+		/// </summary>
+		/// <param name="stopCalled"></param>
+		/// <returns></returns>
+		public override Task OnDisconnected(bool stopCalled)
+		{
+			Clients.All.playerLeft(_currentPlayerState.Player);
+			_enemyStates = null;
+			_currentPlayerState = null;
+			MapLoader.MapData = null;
+			MapLoader.MapInstance = null;
+			return null;
+		}
 		/// <summary>
 		/// Singleton new player state
 		/// </summary>
@@ -131,26 +147,13 @@ namespace BomberManUAWC.Hubs
 				player.Y = initialPosition.Y;
 				player.ExactX = initialPosition.X * ConstantValues.Power;
 				player.ExactY = initialPosition.Y * ConstantValues.Power;
-				player.Direction = Direction.SOUTH;
+				player.Direction = Directions.SOUTH;
 
 				return new PlayerState { Player = player, Inputs = new ConcurrentQueue<KeyboardState>() };
 			}
 			return _currentPlayerState;
 		}
-		/// <summary>
-		/// Disconnect behavior 
-		/// </summary>
-		/// <param name="stopCalled"></param>
-		/// <returns></returns>
-		public override Task OnDisconnected(bool stopCalled)
-		{
-			Clients.All.playerLeft(_currentPlayerState.Player);
-			_currentPlayerState = null;
-			_enemyStates = null;
-			MapLoader.MapData = null;
-			MapLoader.MapInstance = null;
-			return null;
-		}
+
 		/// <summary>
 		/// Init position of bots
 		/// </summary>
@@ -173,7 +176,7 @@ namespace BomberManUAWC.Hubs
 						Y = initialEnemyPositions[i].Y,
 						ExactX = initialEnemyPositions[i].X * ConstantValues.Power,
 						ExactY = initialEnemyPositions[i].Y * ConstantValues.Power,
-						Direction = Direction.SOUTH
+						Direction = Directions.SOUTH
 					},
 					Inputs = new ConcurrentQueue<KeyboardState>()
 				});

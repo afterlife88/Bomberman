@@ -20,7 +20,7 @@
         this.speed = 1;
         this.directionX = 0;
         this.directionY = 0;
-
+        this.ticks = window.Game.TicksPerSecond * 25;
         this.moving = true;
         this.activeFrameIndex = 0;
 
@@ -81,8 +81,7 @@
 
             this.updateAnimation(game);
 
-            if (game.inputManager.isKeyPress(window.Game.Keys.SPACE) ||
-               game.inputManager.isKeyDown(window.Game.Keys.SPACE)) {
+            if (game.inputManager.isKeyPress(window.Game.Keys.SPACE)) {
                 this.createBomb(game);
             }
         },
@@ -117,8 +116,16 @@
                 var oldX = this.x;
                 var oldY = this.y;
 
+                if (this.ticks > 0) {
+                    this.ticks--;
+                    if (this.ticks === 0) {
+                        this.increaseMaxBombs();
+                        this.ticks = window.Game.TicksPerSecond * 25;
+                    }
+                }
                 this.moveExact(game, x, y);
-
+                window.Game.Logger.log('max bombs = ' + this.maxBombs);
+                window.Game.Logger.log('bombs = ' + this.bombs);
                 if (this.x !== oldX || this.y !== oldY || this.placedBomb) {
                     this.hasMoved = true;
                     //console.log('player has moved');
@@ -244,8 +251,6 @@
 
                 if (!movable && intersects) {
                     collisions.push({ x: targetX, y: targetY });
-
-                    window.Game.Logger.log('collision=(' + targetX + ', ' + targetY + ')');
                 }
                 else {
                     possible.push({ x: targetX, y: targetY });
@@ -308,8 +313,6 @@
                 }
 
                 if (candidate) {
-                    window.Game.Logger.log('candidate=(' + candidate.x + ', ' + candidate.y + ')');
-                    window.Game.Logger.log('candidate dir=(' + candidate.directionX + ', ' + candidate.directionY + ')');
 
                     var diffX = candidate.x * POWER - this.exactX,
                         diffY = candidate.y * POWER - this.exactY,
@@ -372,9 +375,6 @@
                         this.exactX += DELTA * effectiveDirectionX;
                         this.exactY += DELTA * effectiveDirectionY;
                     }
-
-                    window.Game.Logger.log('diffX=(' + absX + ', diffY=' + absY + ')');
-                    window.Game.Logger.log('effectiveDirection=(' + effectiveDirectionX + ', ' + effectiveDirectionY + ')');
 
                     this.candidate = null;
                 }

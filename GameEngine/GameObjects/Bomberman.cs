@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using GameEngine.Common;
 using GameEngine.Enums;
+using GameEngine.GameStates;
 using GameEngine.Map;
-using GameEngine.MapGenerator;
 
-namespace GameEngine
+namespace GameEngine.GameObjects
 {
 	/// <summary>
 	/// Base class for bomberman
@@ -25,7 +24,7 @@ namespace GameEngine
 		public int ExactY { get; set; }
 		public int DirectionX { get; set; }
 		public int DirectionY { get; set; }
-		public Direction Direction { get; set; }
+		public Directions Direction { get; set; }
 		public int Index { get; set; }
 		public int LastProcessed { get; set; }
 		private int MaxBombs { get; set; } = 1;
@@ -81,9 +80,7 @@ namespace GameEngine
 			if (input[Keys.SPACE])
 			{
 				CreateBomb();
-				
 			}
-
 			SetDirection(DirectionX, DirectionY);
 
 			x += DirectionX * ConstantValues.Delta;
@@ -98,12 +95,11 @@ namespace GameEngine
 		private void CreateBomb()
 		{
 			BombSet = true;
-			if (this.Bombs >= this.MaxBombs)
+			if (Bombs >= MaxBombs)
 			{
 				return;
 			}
-
-			Bomb bomb = new Bomb(X, Y, this);
+			var bomb = new Bomb(X, Y, this);
 			lock (MapLoader.MapInstance.ListOfBombs)
 			{
 				MapLoader.MapInstance.ListOfBombs.Add(bomb);
@@ -111,8 +107,6 @@ namespace GameEngine
 			bomb.StartCountdown();
 			Bombs++;
 		}
-
-		
 		private void MoveExact(int x, int y)
 		{
 			float effectiveX = x / (ConstantValues.Power * 1f),
@@ -280,20 +274,20 @@ namespace GameEngine
 		{
 			if (x == -1)
 			{
-				Direction = Direction.WEST;
+				Direction = Directions.WEST;
 			}
 			else if (x == 1)
 			{
-				Direction = Direction.EAST;
+				Direction = Directions.EAST;
 			}
 
 			if (y == -1)
 			{
-				Direction = Direction.NORTH;
+				Direction = Directions.NORTH;
 			}
 			else if (y == 1)
 			{
-				Direction = Direction.SOUTH;
+				Direction = Directions.SOUTH;
 			}
 		}
 

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Direction to move
 	/// </summary>
-	public enum Direction
+	public enum Directions
 	{
 		NORTH,
 		SOUTH,

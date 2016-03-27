@@ -43,19 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bomb.cs" />
-    <Compile Include="Bomberman.cs" />
-    <Compile Include="Enemy.cs" />
+    <Compile Include="GameObjects\Bomb.cs" />
+    <Compile Include="GameObjects\Bomberman.cs" />
+    <Compile Include="GameObjects\Enemy.cs" />
     <Compile Include="Common\ConstantValues.cs" />
-    <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\Directions.cs" />
     <Compile Include="Enums\Keys.cs" />
-    <Compile Include="Explosion.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
+    <Compile Include="GameStates\EnemyState.cs" />
+    <Compile Include="GameStates\PlayerState.cs" />
     <Compile Include="Map\Tile.cs" />
-    <Compile Include="KeyboardState.cs" />
+    <Compile Include="GameStates\KeyboardState.cs" />
     <Compile Include="Map\Map.cs" />
-    <Compile Include="MapGenerator\MapLoader.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="State.cs" />
+    <Compile Include="Map\MapLoader.cs" />
+    <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameStates\State.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

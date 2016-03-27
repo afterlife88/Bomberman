@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using GameEngine.Common;
 using GameEngine.Enums;
+using GameEngine.GameStates;
 
-namespace GameEngine
+namespace GameEngine.GameObjects
 {
 	public class Enemy : Bomberman
 	{
@@ -24,7 +25,7 @@ namespace GameEngine
 		private IEnumerator<KeyboardState> GetBehaviour()
 		{
 			KeyboardState state = null;
-
+			// random moves
 			while (true)
 			{
 				var num = _random.Next(100);
@@ -42,12 +43,12 @@ namespace GameEngine
 				{
 					state = GetDownKeyboardState(Keys.RIGHT);
 				}
-				if (num > 72 && num <= 96)
+				if (num > 72 && num <= 98)
 				{
 					state = GetDownKeyboardState(Keys.DOWN);
 				
 				}
-				if (num > 96 && num <= 100)
+				if (num > 98 && num <= 100)
 				{
 					state = GetDownKeyboardState(Keys.SPACE);
 					BombSet = true;

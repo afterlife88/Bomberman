@@ -44,6 +44,8 @@
             if (confirm('Game over! Want to play more? ')) {
                 window.location.reload();
                 return;
+            } else {
+                return;
             }
         }
         renderer.draw(engine, context);

@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Timers;
 using GameEngine.Map;
-using GameEngine.MapGenerator;
 
-namespace GameEngine
+namespace GameEngine.GameObjects
 {
 	public class Explosion
 	{
