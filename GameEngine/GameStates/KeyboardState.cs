@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GameEngine.Enums;
+using GameEngine.Moves;
 
 namespace GameEngine.GameStates
 {
@@ -8,13 +8,13 @@ namespace GameEngine.GameStates
 	/// </summary>
 	public class KeyboardState
 	{
-		private readonly Dictionary<Keys, bool> _keyState;
+		private readonly Dictionary<DirectionsKeys, bool> _keyState;
 		public int Id { get; }
-		public KeyboardState(Dictionary<Keys, bool> keyState, int id)
+		public KeyboardState(Dictionary<DirectionsKeys, bool> keyState, int id)
 		{
 			_keyState = keyState;
 			Id = id;
 		}
-		public bool this[Keys key] => _keyState[key];
+		public bool this[DirectionsKeys directionsKey] => _keyState[directionsKey];
 	}
 }

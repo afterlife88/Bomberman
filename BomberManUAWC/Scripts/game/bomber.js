@@ -81,7 +81,7 @@
 
             this.updateAnimation(game);
 
-            if (game.inputManager.isKeyPress(window.Game.Keys.SPACE)) {
+            if (game.inputManager.isKeyDown(window.Game.Keys.SPACE)) {
                 this.createBomb(game);
             }
         },

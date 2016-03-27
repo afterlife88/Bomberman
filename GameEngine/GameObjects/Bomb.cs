@@ -59,7 +59,7 @@ namespace GameEngine.GameObjects
 		/// Get point that destroyed at explosion
 		/// </summary>
 		/// <returns></returns>
-		private List<Point> GetDangerPoints()
+		public List<Point> GetDangerPoints()
 		{
 			var dangerPoints = new List<Point>();
 			foreach (var dir in ConstantValues.ExsplosionDirections)
@@ -83,6 +83,15 @@ namespace GameEngine.GameObjects
 			}
 			return dangerPoints;
 		}
+
+		public Point Location
+		{
+			get
+			{
+				return new Point(this._x, this._y);
+			}
+		}
+
 		/// <summary>
 		/// Check if bomb can destroy objects of map
 		/// </summary>

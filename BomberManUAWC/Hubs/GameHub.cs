@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameEngine;
 using GameEngine.Common;
-using GameEngine.Enums;
 using GameEngine.GameObjects;
 using GameEngine.GameStates;
 using GameEngine.Map;
+using GameEngine.Moves;
 using Microsoft.AspNet.SignalR;
 
 namespace BomberManUAWC.Hubs

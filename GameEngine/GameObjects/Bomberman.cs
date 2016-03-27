@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using GameEngine.Common;
-using GameEngine.Enums;
 using GameEngine.GameStates;
 using GameEngine.Map;
+using GameEngine.Moves;
 
 namespace GameEngine.GameObjects
 {
@@ -38,46 +38,46 @@ namespace GameEngine.GameObjects
 			int x = ExactX,
 				y = ExactY;
 
-			if (!input[Keys.UP])
+			if (!input[DirectionsKeys.UP])
 			{
 				DirectionY = 0;
 			}
 
-			if (!input[Keys.DOWN])
+			if (!input[DirectionsKeys.DOWN])
 			{
 				DirectionY = 0;
 			}
 
-			if (!input[Keys.LEFT])
+			if (!input[DirectionsKeys.LEFT])
 			{
 				DirectionX = 0;
 			}
 
-			if (!input[Keys.RIGHT])
+			if (!input[DirectionsKeys.RIGHT])
 			{
 				DirectionX = 0;
 			}
 
-			if (input[Keys.DOWN])
+			if (input[DirectionsKeys.DOWN])
 			{
 				DirectionY = 1;
 			}
 
-			if (input[Keys.UP])
+			if (input[DirectionsKeys.UP])
 			{
 				DirectionY = -1;
 			}
 
-			if (input[Keys.LEFT])
+			if (input[DirectionsKeys.LEFT])
 			{
 				DirectionX = -1;
 			}
 
-			if (input[Keys.RIGHT])
+			if (input[DirectionsKeys.RIGHT])
 			{
 				DirectionX = 1;
 			}
-			if (input[Keys.SPACE])
+			if (input[DirectionsKeys.SPACE])
 			{
 				CreateBomb();
 			}

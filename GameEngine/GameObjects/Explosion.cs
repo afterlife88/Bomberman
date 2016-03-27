@@ -8,7 +8,7 @@ namespace GameEngine.GameObjects
 {
 	public class Explosion
 	{
-		private int _lifeTime = 1000;
+		private int _lifeTime = 500;
 		private Timer _timer;
 		private readonly List<Point> _explosionPoints;
 		public Explosion(List<Point> explosionPoints)

@@ -26,7 +26,7 @@
             this.player.removeBomb();
             game.removeSprite(this);
 
-            game.addSprite(new window.Game.Explosion(this.x, this.y, 1));
+            game.addSprite(new window.Game.Explosion(this.x, this.y, 0.5));
             for (var i = 0; i < directions.length; ++i) {
                 var dir = directions[i];
                 for (var j = 1; j <= radius; j++) {
@@ -35,7 +35,7 @@
                       x = this.x + dx,
                       y = this.y + dy;
                     if (game.canDestroy(x, y)) {
-                        game.addSprite(new window.Game.Explosion(x, y, 1));
+                        game.addSprite(new window.Game.Explosion(x, y, 0.5));
                     } else {
                         break;
                     }

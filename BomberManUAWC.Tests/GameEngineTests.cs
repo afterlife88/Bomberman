@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
-using GameEngine;
 using GameEngine.Common;
-using GameEngine.Enums;
 using GameEngine.GameObjects;
 using GameEngine.GameStates;
 using GameEngine.Map;
+using GameEngine.Moves;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BomberManUAWC.Tests
@@ -53,7 +51,7 @@ namespace BomberManUAWC.Tests
 				ExactX = startExactX,
 				ExactY = startExactY
 			};
-			var rightState = GetDownKeyboardState(Keys.RIGHT);
+			var rightState = GetDownKeyboardState(DirectionsKeys.RIGHT);
 			for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 			{
 				player.Update(rightState);
@@ -72,7 +70,7 @@ namespace BomberManUAWC.Tests
 				ExactY = 100,
 				Bombs = bombsPlantedBefore
 			};
-			var plantBombState = GetDownKeyboardState(Keys.SPACE);
+			var plantBombState = GetDownKeyboardState(DirectionsKeys.SPACE);
 			player.Update(plantBombState);
 			Assert.AreNotEqual(bombsPlantedBefore, player.Bombs);
 			// Check that this bomb added to all bombs on map
@@ -90,9 +88,9 @@ namespace BomberManUAWC.Tests
 				ExactY = 100,
 				Bombs = bombsPlantedBefore
 			};
-			var plantBombState = GetDownKeyboardState(Keys.SPACE);
+			var plantBombState = GetDownKeyboardState(DirectionsKeys.SPACE);
 			player.Update(plantBombState);
-			var rightState = GetDownKeyboardState(Keys.RIGHT);
+			var rightState = GetDownKeyboardState(DirectionsKeys.RIGHT);
 			player.Update(plantBombState);
 			for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 			{
@@ -108,15 +106,15 @@ namespace BomberManUAWC.Tests
 			// Check explosion are in player position
 			Assert.IsTrue(MapLoader.MapInstance.CheckExplosion(player.X, player.Y));
 		}
-		private static KeyboardState GetDownKeyboardState(Keys key)
+		private KeyboardState GetDownKeyboardState(DirectionsKeys directionsKey)
 		{
-			var dict = new Dictionary<Keys, bool>();
-			foreach (var v in Enum.GetValues(typeof(Keys)))
+			var dict = new Dictionary<DirectionsKeys, bool>();
+			foreach (var v in Enum.GetValues(typeof(DirectionsKeys)))
 			{
-				dict[(Keys)v] = false;
+				dict[(DirectionsKeys)v] = false;
 			}
 
-			dict[key] = true;
+			dict[directionsKey] = true;
 
 			return new KeyboardState(dict, 0);
 		}

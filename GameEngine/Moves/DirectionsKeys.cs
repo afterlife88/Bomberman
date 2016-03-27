@@ -1,9 +1,9 @@
-﻿namespace GameEngine.Enums
+﻿namespace GameEngine.Moves
 {
 	/// <summary>
 	/// Enum for keyboard values 
 	/// </summary>
-	public enum Keys
+	public enum DirectionsKeys
 	{
 		UP = 38,
 		DOWN = 40,

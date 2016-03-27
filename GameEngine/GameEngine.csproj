@@ -47,8 +47,8 @@
     <Compile Include="GameObjects\Bomberman.cs" />
     <Compile Include="GameObjects\Enemy.cs" />
     <Compile Include="Common\ConstantValues.cs" />
-    <Compile Include="Enums\Directions.cs" />
-    <Compile Include="Enums\Keys.cs" />
+    <Compile Include="Moves\Directions.cs" />
+    <Compile Include="Moves\DirectionsKeys.cs" />
     <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameStates\EnemyState.cs" />
     <Compile Include="GameStates\PlayerState.cs" />

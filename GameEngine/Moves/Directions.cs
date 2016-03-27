@@ -1,4 +1,4 @@
-﻿namespace GameEngine.Enums
+﻿namespace GameEngine.Moves
 {
 	/// <summary>
 	/// Direction to move

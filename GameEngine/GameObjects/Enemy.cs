@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using GameEngine.Common;
-using GameEngine.Enums;
 using GameEngine.GameStates;
+using GameEngine.Map;
+using GameEngine.Moves;
 
 namespace GameEngine.GameObjects
 {
@@ -24,61 +26,108 @@ namespace GameEngine.GameObjects
 
 		private IEnumerator<KeyboardState> GetBehaviour()
 		{
-			KeyboardState state = null;
-			// random moves
+		
 			while (true)
 			{
-				// Get avalible move
-				var avalibleList = GetPath();
-				// Hit random move
-				var randomMove = _random.Next(avalibleList.Count);
-				// Set bomb to true if hit plant move
-				BombSet = false || avalibleList[randomMove] == Keys.SPACE;
-				state = GetDownKeyboardState(avalibleList[randomMove]);
+				KeyboardState state = null;
+
+				if (MapLoader.MapInstance.ListOfBombs.Count > 0)
+				{
+					state = CheckBomb(state);
+				}
+				// random move
+				if (state == null)
+				{
+					// Get avalible move
+					var avalibleList = GetPath(true);
+					// Hit random move
+					var randomMove = _random.Next(avalibleList.Count);
+					// Set bomb to true if hit plant move
+					BombSet = false || avalibleList[randomMove] == DirectionsKeys.SPACE;
+					state = GetDownKeyboardState(avalibleList[randomMove]);
+				}
+
 				for (var i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 				{
 					yield return state;
 				}
 			}
 		}
+
+		private KeyboardState CheckBomb(KeyboardState state)
+		{
+
+			foreach (var bomb in MapLoader.MapInstance.ListOfBombs)
+			{
+				var ourPosition = new Point(this.X, this.Y);
+				var dangerPoints = bomb.GetDangerPoints();
+				dangerPoints.Add(bomb.Location);
+				var availableMoves = GetPath(false);
+				if (dangerPoints.Contains(ourPosition))
+				{
+					if (ourPosition.X >= bomb.Location.X && availableMoves.Contains(DirectionsKeys.RIGHT))
+					{
+						return GetDownKeyboardState(DirectionsKeys.RIGHT);
+					}
+					if (ourPosition.X <= bomb.Location.X && availableMoves.Contains(DirectionsKeys.LEFT))
+					{
+						return GetDownKeyboardState(DirectionsKeys.LEFT);
+					}
+					if (ourPosition.Y >= bomb.Location.Y && availableMoves.Contains(DirectionsKeys.UP))
+					{
+						return GetDownKeyboardState(DirectionsKeys.UP);
+					}
+					if (ourPosition.Y <= bomb.Location.Y && availableMoves.Contains(DirectionsKeys.DOWN))
+					{
+						return GetDownKeyboardState(DirectionsKeys.DOWN);
+					}
+
+					return GetDownKeyboardState(availableMoves[_random.Next(availableMoves.Count)]);
+				}
+
+			}
+			return null;
+
+
+		}
 		/// <summary>
 		/// Check if can make next step to avoid walls and bricks
 		/// </summary>
 		/// <returns></returns>
-		private List<Keys> GetPath()
+		private List<DirectionsKeys> GetPath(bool canSetBomb)
 		{
-			var avalibleMoves = new List<Keys>();
+			var avalibleMoves = new List<DirectionsKeys>();
 			var num = _random.Next(100);
 			if (this.Movable(this.X - 1, this.Y))
 			{
-				avalibleMoves.Add(Keys.LEFT);
+				avalibleMoves.Add(DirectionsKeys.LEFT);
 			}
 			if (this.Movable(this.X, this.Y - 1))
 			{
-				avalibleMoves.Add(Keys.UP);
+				avalibleMoves.Add(DirectionsKeys.UP);
 			}
 			if (this.Movable(this.X + 1, this.Y))
 			{
-				avalibleMoves.Add(Keys.RIGHT);
+				avalibleMoves.Add(DirectionsKeys.RIGHT);
 			}
 			if (this.Movable(this.X, this.Y + 1))
 			{
-				avalibleMoves.Add(Keys.DOWN);
+				avalibleMoves.Add(DirectionsKeys.DOWN);
 			}
-			if (num > 85 && num <= 100)
-				avalibleMoves.Add(Keys.SPACE);
+			if (num > 85 && num <= 100 && canSetBomb)
+				avalibleMoves.Add(DirectionsKeys.SPACE);
 			return avalibleMoves;
-			
+
 		}
-		private static KeyboardState GetDownKeyboardState(Keys key)
+		private KeyboardState GetDownKeyboardState(DirectionsKeys directionsKey)
 		{
-			var dict = new Dictionary<Keys, bool>();
-			foreach (var v in Enum.GetValues(typeof(Keys)))
+			var dict = new Dictionary<DirectionsKeys, bool>();
+			foreach (var v in Enum.GetValues(typeof(DirectionsKeys)))
 			{
-				dict[(Keys)v] = false;
+				dict[(DirectionsKeys)v] = false;
 			}
 
-			dict[key] = true;
+			dict[directionsKey] = true;
 
 			return new KeyboardState(dict, 0);
 		}
