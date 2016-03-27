@@ -1,7 +1,7 @@
 ﻿namespace GameEngine.Map
 {
 	/// <summary>
-	/// Obstacles of map
+	/// Items of map
 	/// </summary>
 	public enum Tile
 	{

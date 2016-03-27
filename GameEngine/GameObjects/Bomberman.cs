@@ -10,7 +10,7 @@ using GameEngine.Moves;
 namespace GameEngine.GameObjects
 {
 	/// <summary>
-	/// Base class for bomberman
+	/// Base class for all bombermans
 	/// </summary>
 	public class Bomberman
 	{

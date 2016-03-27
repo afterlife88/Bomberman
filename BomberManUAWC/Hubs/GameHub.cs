@@ -15,7 +15,7 @@ using Microsoft.AspNet.SignalR;
 namespace BomberManUAWC.Hubs
 {
 	/// <summary>
-	/// Main hub to manage client movements
+	/// Main hub for the game
 	/// </summary>
 	public class GameHub : Hub
 	{
@@ -86,7 +86,7 @@ namespace BomberManUAWC.Hubs
 		}
 
 		/// <summary>
-		/// Persistance connection with client to update state of player on server
+		/// Updating state of player and bots on client
 		/// </summary>
 		/// <param name="context"></param>
 		private void Update(IHubContext context)

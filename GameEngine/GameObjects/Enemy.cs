@@ -111,8 +111,8 @@ namespace GameEngine.GameObjects
 			{
 				avalibleMoves.Add(DirectionsKeys.DOWN);
 			}
-			// 10 % probability to plant bomb 
-			if (num > 90 && num <= 100 && canSetBomb)
+			// 5 % probability to plant bomb 
+			if (num > 95 && num <= 100 && canSetBomb)
 				avalibleMoves.Add(DirectionsKeys.SPACE);
 			return avalibleMoves;
 
