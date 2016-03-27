@@ -96,7 +96,9 @@ namespace BomberManUAWC.Hubs
 				KeyboardState input;
 				if (_currentPlayerState.Inputs.TryDequeue(out input))
 				{
+					// Update player state
 					_currentPlayerState.Player.Update(input);
+					// Set it to client
 					context.Clients.All.updatePlayerState(_currentPlayerState.Player);
 				}
 			}
@@ -109,10 +111,11 @@ namespace BomberManUAWC.Hubs
 						_enemyStates.Remove(enemyState);
 						continue;
 					}
+					// Getting the next bot move
 					var input = enemyState.Enemy.GetNextMove();
 					enemyState.Enemy.Update(input);
 				}
-				// Update enemies on clientclient.updateEnemyStates
+				// Update enemies on client
 				context.Clients.All.updateEnemyStates(_enemyStates);
 			}
 		}
