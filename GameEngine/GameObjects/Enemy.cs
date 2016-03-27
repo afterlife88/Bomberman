@@ -49,6 +49,10 @@ namespace GameEngine.GameObjects
 				}
 			}
 		}
+		/// <summary>
+		/// Check bomb on the map, and move out of them
+		/// </summary>
+		/// <returns></returns>
 		private KeyboardState CheckBomb()
 		{
 			foreach (var bomb in MapLoader.MapInstance.ListOfBombs)

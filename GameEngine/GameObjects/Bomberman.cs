@@ -14,6 +14,7 @@ namespace GameEngine.GameObjects
 	/// </summary>
 	public class Bomberman
 	{
+
 		private static readonly Point[] EastTargets = { new Point(1, -1), new Point(1, 0), new Point(1, 1) };
 		private static readonly Point[] WestTargets = { new Point(-1, -1), new Point(-1, 0), new Point(-1, 1) };
 		private static readonly Point[] NorthTargets = { new Point(-1, -1), new Point(0, -1), new Point(1, -1) };

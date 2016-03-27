@@ -17,8 +17,6 @@
         }
         return true;
     }
-
-
     window.Game.Engine = function (assetManager) {
         this.assetManager = assetManager;
         this.players = {};
@@ -56,9 +54,8 @@
             BRICK: 3,
         };
     }
-    // methods
     window.Game.Engine.prototype = {
-        // methods
+       
         onKeydown: function (e) {
             keyState[e.keyCode] = true;
         },

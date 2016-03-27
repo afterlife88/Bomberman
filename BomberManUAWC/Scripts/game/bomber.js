@@ -229,7 +229,7 @@
 
 
 
-            window.Game.Logger.log('actualX=' + actualX + ', actualY=' + actualY);
+            //window.Game.Logger.log('playerX=' + actualX + ', playerY=' + actualY);
 
 
             for (var i = 0; i < targets.length; ++i) {
