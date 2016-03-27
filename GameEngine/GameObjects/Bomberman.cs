@@ -258,7 +258,7 @@ namespace GameEngine.GameObjects
 				}
 			}
 		}
-		private bool Movable(int x, int y)
+		protected bool Movable(int x, int y)
 		{
 			if (y >= 0 && y < MapLoader.MapInstance.Height && x >= 0 && x < MapLoader.MapInstance.Width)
 			{

@@ -28,36 +28,47 @@ namespace GameEngine.GameObjects
 			// random moves
 			while (true)
 			{
-				var num = _random.Next(100);
-				BombSet = false;
-
-				if (num <= 24)
-				{
-					state = GetDownKeyboardState(Keys.LEFT);
-				}
-				if (num > 24 && num <= 48)
-				{
-					state = GetDownKeyboardState(Keys.UP);
-				}
-				if (num > 48 && num <= 72)
-				{
-					state = GetDownKeyboardState(Keys.RIGHT);
-				}
-				if (num > 72 && num <= 98)
-				{
-					state = GetDownKeyboardState(Keys.DOWN);
-				
-				}
-				if (num > 98 && num <= 100)
-				{
-					state = GetDownKeyboardState(Keys.SPACE);
-					BombSet = true;
-				}
-				for (int i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
+				// Get avalible move
+				var avalibleList = GetPath();
+				// Hit random move
+				var randomMove = _random.Next(avalibleList.Count);
+				// Set bomb to true if hit plant move
+				BombSet = false || avalibleList[randomMove] == Keys.SPACE;
+				state = GetDownKeyboardState(avalibleList[randomMove]);
+				for (var i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 				{
 					yield return state;
 				}
 			}
+		}
+		/// <summary>
+		/// Check if can make next step to avoid walls and bricks
+		/// </summary>
+		/// <returns></returns>
+		private List<Keys> GetPath()
+		{
+			var avalibleMoves = new List<Keys>();
+			var num = _random.Next(100);
+			if (this.Movable(this.X - 1, this.Y))
+			{
+				avalibleMoves.Add(Keys.LEFT);
+			}
+			if (this.Movable(this.X, this.Y - 1))
+			{
+				avalibleMoves.Add(Keys.UP);
+			}
+			if (this.Movable(this.X + 1, this.Y))
+			{
+				avalibleMoves.Add(Keys.RIGHT);
+			}
+			if (this.Movable(this.X, this.Y + 1))
+			{
+				avalibleMoves.Add(Keys.DOWN);
+			}
+			if (num > 85 && num <= 100)
+				avalibleMoves.Add(Keys.SPACE);
+			return avalibleMoves;
+			
 		}
 		private static KeyboardState GetDownKeyboardState(Keys key)
 		{

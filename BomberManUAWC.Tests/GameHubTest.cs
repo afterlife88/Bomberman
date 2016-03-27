@@ -1,13 +1,8 @@
-﻿using System;
-using System.Dynamic;
-using System.Runtime.Remoting.Contexts;
-using BomberManUAWC.Hubs;
+﻿using BomberManUAWC.Hubs;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Xunit;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 
 namespace BomberManUAWC.Tests
