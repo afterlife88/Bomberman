@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using GameEngine.Common;
 using GameEngine.GameStates;
 using GameEngine.Map;
@@ -12,33 +13,29 @@ namespace GameEngine.GameObjects
 	{
 		private static Random _random = new Random();
 		private readonly IEnumerator<KeyboardState> _behaviour;
-
 		public Enemy()
 		{
 			_behaviour = GetBehaviour();
 		}
-
 		public KeyboardState GetNextMove()
 		{
 			_behaviour.MoveNext();
 			return _behaviour.Current;
 		}
-
 		private IEnumerator<KeyboardState> GetBehaviour()
 		{
-		
 			while (true)
 			{
 				KeyboardState state = null;
 
 				if (MapLoader.MapInstance.ListOfBombs.Count > 0)
 				{
-					state = CheckBomb(state);
+					state = CheckBomb();
 				}
 				// random move
 				if (state == null)
 				{
-					// Get avalible move
+					// Get avalible move, with probability to set plant
 					var avalibleList = GetPath(true);
 					// Hit random move
 					var randomMove = _random.Next(avalibleList.Count);
@@ -46,21 +43,19 @@ namespace GameEngine.GameObjects
 					BombSet = false || avalibleList[randomMove] == DirectionsKeys.SPACE;
 					state = GetDownKeyboardState(avalibleList[randomMove]);
 				}
-
 				for (var i = 0; i < ConstantValues.CountToMoveOnActualPosition; i++)
 				{
 					yield return state;
 				}
 			}
 		}
-
-		private KeyboardState CheckBomb(KeyboardState state)
+		private KeyboardState CheckBomb()
 		{
-
 			foreach (var bomb in MapLoader.MapInstance.ListOfBombs)
 			{
 				var ourPosition = new Point(this.X, this.Y);
-				var dangerPoints = bomb.GetDangerPoints();
+
+				var dangerPoints = MapLoader.MapInstance.PointsToExplode.ToList();
 				dangerPoints.Add(bomb.Location);
 				var availableMoves = GetPath(false);
 				if (dangerPoints.Contains(ourPosition))
@@ -81,10 +76,8 @@ namespace GameEngine.GameObjects
 					{
 						return GetDownKeyboardState(DirectionsKeys.DOWN);
 					}
-
 					return GetDownKeyboardState(availableMoves[_random.Next(availableMoves.Count)]);
 				}
-
 			}
 			return null;
 
@@ -114,7 +107,8 @@ namespace GameEngine.GameObjects
 			{
 				avalibleMoves.Add(DirectionsKeys.DOWN);
 			}
-			if (num > 85 && num <= 100 && canSetBomb)
+			// 10 % probability to plant bomb 
+			if (num > 90 && num <= 100 && canSetBomb)
 				avalibleMoves.Add(DirectionsKeys.SPACE);
 			return avalibleMoves;
 
